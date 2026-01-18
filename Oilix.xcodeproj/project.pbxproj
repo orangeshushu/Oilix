@@ -1,0 +1,481 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7B44613E27BBF82A00997579 /* PinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B44613D27BBF82A00997579 /* PinView.swift */; };
+		7B44614027EC7ABD00997579 /* RegView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B44613F27EC7ABD00997579 /* RegView.swift */; };
+		7B45740A277B42890057BAC4 /* UIImage+CVPixelBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B457409277B42890057BAC4 /* UIImage+CVPixelBuffer.swift */; };
+		7B45740C277FB3E10057BAC4 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B45740B277FB3E10057BAC4 /* HistoryView.swift */; };
+		7B45740E279894270057BAC4 /* WaterImage.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 7B45740D279894270057BAC4 /* WaterImage.mlmodel */; };
+		7B45741027A7A8870057BAC4 /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B45740F27A7A8870057BAC4 /* History.swift */; };
+		7B46702F284ABCD900A2FDA6 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B46702E284ABCD900A2FDA6 /* CameraView.swift */; };
+		7B47F0992873EDB700177FF0 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B47F0982873EDB700177FF0 /* LocationManager.swift */; };
+		7B47F09B28791D3800177FF0 /* WaterSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B47F09A28791D3800177FF0 /* WaterSample.swift */; };
+		7B47F09D2879F34F00177FF0 /* NoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B47F09C2879F34F00177FF0 /* NoteView.swift */; };
+		7B60CF85274D93F70060A703 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B60CF84274D93F70060A703 /* LoginView.swift */; };
+		7B60CF88274DC9840060A703 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7B60CF87274DC9840060A703 /* Alamofire */; };
+		7B63CA02292C9BF8009E02A9 /* LocationEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B63CA01292C9BF8009E02A9 /* LocationEditView.swift */; };
+		7B80026F28AD3C6800242899 /* water_predict_bgr.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 7B80026E28AD3C6800242899 /* water_predict_bgr.mlmodel */; };
+		7B80027128AE1B4E00242899 /* ResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B80027028AE1B4E00242899 /* ResetView.swift */; };
+		7B80027328AF2CA900242899 /* EntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B80027228AF2CA900242899 /* EntryView.swift */; };
+		7BD4063D275E5DF100476061 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD4063C275E5DF100476061 /* HomeView.swift */; };
+		7BD4063F275E5E1600476061 /* AlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD4063E275E5E1600476061 /* AlbumView.swift */; };
+		7BD40641275E5E2B00476061 /* SamplingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD40640275E5E2B00476061 /* SamplingView.swift */; };
+		7BD40643275E5E4300476061 /* AnalyzingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD40642275E5E4300476061 /* AnalyzingView.swift */; };
+		7BD40645275E5E5D00476061 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD40644275E5E5D00476061 /* SettingView.swift */; };
+		7BD40647275E5EE300476061 /* TabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD40646275E5EE300476061 /* TabbarView.swift */; };
+		7BD4064B275E9C0900476061 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD4064A275E9C0900476061 /* ImagePicker.swift */; };
+		7BDC51CF274B028C00988AF2 /* OilixApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BDC51CE274B028C00988AF2 /* OilixApp.swift */; };
+		7BDC51D1274B028C00988AF2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BDC51D0274B028C00988AF2 /* ContentView.swift */; };
+		7BDC51D3274B028E00988AF2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7BDC51D2274B028E00988AF2 /* Assets.xcassets */; };
+		7BDC51D6274B028E00988AF2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7BDC51D5274B028E00988AF2 /* Preview Assets.xcassets */; };
+		7BDC51DF274C7FA700988AF2 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BDC51DE274C7FA700988AF2 /* Session.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		7B44613D27BBF82A00997579 /* PinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinView.swift; sourceTree = "<group>"; };
+		7B44613F27EC7ABD00997579 /* RegView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegView.swift; sourceTree = "<group>"; };
+		7B457409277B42890057BAC4 /* UIImage+CVPixelBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+CVPixelBuffer.swift"; sourceTree = "<group>"; };
+		7B45740B277FB3E10057BAC4 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		7B45740D279894270057BAC4 /* WaterImage.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = WaterImage.mlmodel; sourceTree = "<group>"; };
+		7B45740F27A7A8870057BAC4 /* History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
+		7B46702E284ABCD900A2FDA6 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
+		7B47F0982873EDB700177FF0 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		7B47F09A28791D3800177FF0 /* WaterSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterSample.swift; sourceTree = "<group>"; };
+		7B47F09C2879F34F00177FF0 /* NoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteView.swift; sourceTree = "<group>"; };
+		7B60CF84274D93F70060A703 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		7B63CA01292C9BF8009E02A9 /* LocationEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationEditView.swift; sourceTree = "<group>"; };
+		7B80026E28AD3C6800242899 /* water_predict_bgr.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = water_predict_bgr.mlmodel; sourceTree = "<group>"; };
+		7B80027028AE1B4E00242899 /* ResetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetView.swift; sourceTree = "<group>"; };
+		7B80027228AF2CA900242899 /* EntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryView.swift; sourceTree = "<group>"; };
+		7BD4063C275E5DF100476061 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		7BD4063E275E5E1600476061 /* AlbumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumView.swift; sourceTree = "<group>"; };
+		7BD40640275E5E2B00476061 /* SamplingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamplingView.swift; sourceTree = "<group>"; };
+		7BD40642275E5E4300476061 /* AnalyzingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzingView.swift; sourceTree = "<group>"; };
+		7BD40644275E5E5D00476061 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
+		7BD40646275E5EE300476061 /* TabbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarView.swift; sourceTree = "<group>"; };
+		7BD4064A275E9C0900476061 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		7BD4064C275EADC900476061 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		7BDC51CB274B028C00988AF2 /* Oilix.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Oilix.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7BDC51CE274B028C00988AF2 /* OilixApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OilixApp.swift; sourceTree = "<group>"; };
+		7BDC51D0274B028C00988AF2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		7BDC51D2274B028E00988AF2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7BDC51D5274B028E00988AF2 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		7BDC51DE274C7FA700988AF2 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7BDC51C8274B028C00988AF2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B60CF88274DC9840060A703 /* Alamofire in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7BDC51C2274B028C00988AF2 = {
+			isa = PBXGroup;
+			children = (
+				7BDC51CD274B028C00988AF2 /* Oilix */,
+				7BDC51CC274B028C00988AF2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7BDC51CC274B028C00988AF2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7BDC51CB274B028C00988AF2 /* Oilix.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7BDC51CD274B028C00988AF2 /* Oilix */ = {
+			isa = PBXGroup;
+			children = (
+				7BD4063E275E5E1600476061 /* AlbumView.swift */,
+				7BD40642275E5E4300476061 /* AnalyzingView.swift */,
+				7BDC51D2274B028E00988AF2 /* Assets.xcassets */,
+				7B46702E284ABCD900A2FDA6 /* CameraView.swift */,
+				7BDC51D0274B028C00988AF2 /* ContentView.swift */,
+				7B80027228AF2CA900242899 /* EntryView.swift */,
+				7B45740F27A7A8870057BAC4 /* History.swift */,
+				7B45740B277FB3E10057BAC4 /* HistoryView.swift */,
+				7BD4063C275E5DF100476061 /* HomeView.swift */,
+				7BD4064A275E9C0900476061 /* ImagePicker.swift */,
+				7BD4064C275EADC900476061 /* Info.plist */,
+				7B63CA01292C9BF8009E02A9 /* LocationEditView.swift */,
+				7B47F0982873EDB700177FF0 /* LocationManager.swift */,
+				7B60CF84274D93F70060A703 /* LoginView.swift */,
+				7B47F09C2879F34F00177FF0 /* NoteView.swift */,
+				7BDC51CE274B028C00988AF2 /* OilixApp.swift */,
+				7B44613D27BBF82A00997579 /* PinView.swift */,
+				7BDC51D4274B028E00988AF2 /* Preview Content */,
+				7B44613F27EC7ABD00997579 /* RegView.swift */,
+				7B80027028AE1B4E00242899 /* ResetView.swift */,
+				7BD40640275E5E2B00476061 /* SamplingView.swift */,
+				7BDC51DE274C7FA700988AF2 /* Session.swift */,
+				7BD40644275E5E5D00476061 /* SettingView.swift */,
+				7BD40646275E5EE300476061 /* TabbarView.swift */,
+				7B457409277B42890057BAC4 /* UIImage+CVPixelBuffer.swift */,
+				7B80026E28AD3C6800242899 /* water_predict_bgr.mlmodel */,
+				7B45740D279894270057BAC4 /* WaterImage.mlmodel */,
+				7B47F09A28791D3800177FF0 /* WaterSample.swift */,
+			);
+			path = Oilix;
+			sourceTree = "<group>";
+		};
+		7BDC51D4274B028E00988AF2 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				7BDC51D5274B028E00988AF2 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7BDC51CA274B028C00988AF2 /* Oilix */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7BDC51D9274B028E00988AF2 /* Build configuration list for PBXNativeTarget "Oilix" */;
+			buildPhases = (
+				7BDC51C7274B028C00988AF2 /* Sources */,
+				7BDC51C8274B028C00988AF2 /* Frameworks */,
+				7BDC51C9274B028C00988AF2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Oilix;
+			packageProductDependencies = (
+				7B60CF87274DC9840060A703 /* Alamofire */,
+			);
+			productName = Oilix;
+			productReference = 7BDC51CB274B028C00988AF2 /* Oilix.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7BDC51C3274B028C00988AF2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1310;
+				LastUpgradeCheck = 1310;
+				TargetAttributes = {
+					7BDC51CA274B028C00988AF2 = {
+						CreatedOnToolsVersion = 13.1;
+					};
+				};
+			};
+			buildConfigurationList = 7BDC51C6274B028C00988AF2 /* Build configuration list for PBXProject "Oilix" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 7BDC51C2274B028C00988AF2;
+			packageReferences = (
+				7B60CF86274DC9840060A703 /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
+			productRefGroup = 7BDC51CC274B028C00988AF2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7BDC51CA274B028C00988AF2 /* Oilix */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7BDC51C9274B028C00988AF2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7BDC51D6274B028E00988AF2 /* Preview Assets.xcassets in Resources */,
+				7BDC51D3274B028E00988AF2 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7BDC51C7274B028C00988AF2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B45741027A7A8870057BAC4 /* History.swift in Sources */,
+				7B45740E279894270057BAC4 /* WaterImage.mlmodel in Sources */,
+				7BDC51DF274C7FA700988AF2 /* Session.swift in Sources */,
+				7BD4063D275E5DF100476061 /* HomeView.swift in Sources */,
+				7B47F09D2879F34F00177FF0 /* NoteView.swift in Sources */,
+				7BDC51D1274B028C00988AF2 /* ContentView.swift in Sources */,
+				7B60CF85274D93F70060A703 /* LoginView.swift in Sources */,
+				7BD40647275E5EE300476061 /* TabbarView.swift in Sources */,
+				7B80026F28AD3C6800242899 /* water_predict_bgr.mlmodel in Sources */,
+				7BD40643275E5E4300476061 /* AnalyzingView.swift in Sources */,
+				7B44614027EC7ABD00997579 /* RegView.swift in Sources */,
+				7B45740C277FB3E10057BAC4 /* HistoryView.swift in Sources */,
+				7BD4063F275E5E1600476061 /* AlbumView.swift in Sources */,
+				7BDC51CF274B028C00988AF2 /* OilixApp.swift in Sources */,
+				7B47F0992873EDB700177FF0 /* LocationManager.swift in Sources */,
+				7B46702F284ABCD900A2FDA6 /* CameraView.swift in Sources */,
+				7BD4064B275E9C0900476061 /* ImagePicker.swift in Sources */,
+				7B44613E27BBF82A00997579 /* PinView.swift in Sources */,
+				7B45740A277B42890057BAC4 /* UIImage+CVPixelBuffer.swift in Sources */,
+				7B63CA02292C9BF8009E02A9 /* LocationEditView.swift in Sources */,
+				7BD40641275E5E2B00476061 /* SamplingView.swift in Sources */,
+				7BD40645275E5E5D00476061 /* SettingView.swift in Sources */,
+				7B47F09B28791D3800177FF0 /* WaterSample.swift in Sources */,
+				7B80027128AE1B4E00242899 /* ResetView.swift in Sources */,
+				7B80027328AF2CA900242899 /* EntryView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		7BDC51D7274B028E00988AF2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		7BDC51D8274B028E00988AF2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		7BDC51DA274B028E00988AF2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 19;
+				DEVELOPMENT_ASSET_PATHS = "\"Oilix/Preview Content\"";
+				DEVELOPMENT_TEAM = ZA5R9X85B5;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Oilix/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Turunig on location services allows the app to add geographic coordinate with your sample automaticlly.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "The app can upload oil sample images from your photo library. Allow access to continue.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.0.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mizzou.gcycaas.Oilix;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		7BDC51DB274B028E00988AF2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 19;
+				DEVELOPMENT_ASSET_PATHS = "\"Oilix/Preview Content\"";
+				DEVELOPMENT_TEAM = ZA5R9X85B5;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Oilix/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Turunig on location services allows the app to add geographic coordinate with your sample automaticlly.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "The app can upload oil sample images from your photo library. Allow access to continue.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.0.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mizzou.gcycaas.Oilix;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7BDC51C6274B028C00988AF2 /* Build configuration list for PBXProject "Oilix" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7BDC51D7274B028E00988AF2 /* Debug */,
+				7BDC51D8274B028E00988AF2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7BDC51D9274B028E00988AF2 /* Build configuration list for PBXNativeTarget "Oilix" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7BDC51DA274B028E00988AF2 /* Debug */,
+				7BDC51DB274B028E00988AF2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7B60CF86274DC9840060A703 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7B60CF87274DC9840060A703 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7B60CF86274DC9840060A703 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 7BDC51C3274B028C00988AF2 /* Project object */;
+}
