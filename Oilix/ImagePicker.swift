@@ -73,6 +73,7 @@ struct ImagePicker : UIViewControllerRepresentable{
         var config=PHPickerConfiguration(photoLibrary: photoLibrary)
         config.filter = .images
         config.selectionLimit=0
+        config.preferredAssetRepresentationMode = .current
         let picker=PHPickerViewController(configuration: config)
         picker.delegate=context.coordinator
         return picker
@@ -93,19 +94,20 @@ struct ImagePicker : UIViewControllerRepresentable{
             
             
             
-            //print(parent.picker)
-            parent.picker.toggle()
+            parent.picker=false
         
             //print(parent.picker)
             
             for img in results{
                 if img.itemProvider.canLoadObject(ofClass: UIImage.self){
                     img.itemProvider.loadObject(ofClass: UIImage.self) { (image, err) in
-                        guard let image1=image else{
+                        guard let image1=image as? UIImage else{
                             print(err)
                             return
                         }
                         
+                        var cr = Date.now
+                        var teststring = "0,0"
                         if let assetId = img.assetIdentifier {
                             let assetResults = PHAsset.fetchAssets(withLocalIdentifiers: [assetId], options: nil)
 
@@ -115,17 +117,19 @@ struct ImagePicker : UIViewControllerRepresentable{
                             //let fo = assetResults.firstObject!//may found nil if not allowed for access photo
                             guard let fo = assetResults.firstObject else{
                                 print("may not be allowed to access photo")
+                                DispatchQueue.main.async {
+                                    self.parent.samples.add(image: image1, location: teststring, times: cr)
+                                }
                                 return
                             }
-                            let cr = fo.creationDate ?? Date.now
+                            cr = fo.creationDate ?? Date.now
                             //self.parent.times.append(cr)
-                            var teststring = ""
                             if let location = fo.location?.coordinate{
-                                teststring = teststring +  String(location.latitude) + "," + String(location.longitude)
+                                teststring = String(location.latitude) + "," + String(location.longitude)
                                 
                             }
                             else{
-                                teststring += "0,0"//used to be "no location, "
+                                teststring = "0,0"//used to be "no location, "
                             }
                             //let dateFormatter = DateFormatter()
                             //dateFormatter.dateFormat = "MM/dd/y HH:mm"
@@ -144,10 +148,13 @@ struct ImagePicker : UIViewControllerRepresentable{
                             //self.parent.locations.append(teststring)
                             print(teststring)
                             //self.parent.notes.append("\(Int.random(in: 1...100))")
-                            self.parent.samples.add(image: image1 as! UIImage, location: teststring, times: cr)
                           }
                         else{
                             print(img.assetIdentifier)
+                        }
+                        
+                        DispatchQueue.main.async {
+                            self.parent.samples.add(image: image1, location: teststring, times: cr)
                         }
  
                         //let identifiers=results.compactMap(\.assetIdentifier)

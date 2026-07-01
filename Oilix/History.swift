@@ -61,7 +61,7 @@ class History:ObservableObject{
         var ls=locStr
         ls.removeAll(where:{vowels.contains($0)})
         let loc=ls.components(separatedBy: ",")
-        if loc.count != 2
+        if loc.count != 2
         {
             return nil
         }
@@ -110,7 +110,7 @@ class History:ObservableObject{
                     
                     //print(AFdata.data! as NSData)
                     //print(String(decoding:AFdata.data!, as: UTF8.self))//Thread 1: Fatal error: Unexpectedly found nil while unwrapping an Optional value
-                    guard var dvj=AFdata.data else{
+                    guard let dvj=AFdata.data else{
                         print("Error: Cannot unwarp data")
                         return
                     }
@@ -189,7 +189,7 @@ class History:ObservableObject{
                 //self.err=false
                 let dateform=DateFormatter()
                 dateform.dateFormat="yyyy-MM-dd"
-                self.data.removeAll()
+                var historyItems = [sampleHist]()
                 for hm in self.j1!.msg {
                     /*
                     print(hm.date)
@@ -207,7 +207,7 @@ class History:ObservableObject{
                      */
                     
                     print(hm.value.date)
-                    self.data.append(sampleHist(
+                    historyItems.append(sampleHist(
                         date: dateform.date(from: hm.value.date)!,
                         //locat: CLLocationCoordinate2D(latitude:Double.random(in: 32.5 ... 48.9),longitude:Double.random(in: -117.2 ... -81.4)),
                         locat: History.getLocation(locStr: hm.value.gps),
@@ -220,6 +220,7 @@ class History:ObservableObject{
                         tags: hm.value.tags ?? ""))
 
                 }
+                self.data = historyItems.sorted { $0.date > $1.date }
             }
     }
      

@@ -17,10 +17,15 @@ struct LoginView: View {
     @State var reg=false
     @State var res=false
     @State var dis=false
+    @State private var loginMode=0
     //@State var loading=false
     @State private var camDisconnectAlert=false
     @StateObject var se:Session
     //@State var t1=false
+    private var canSignIn: Bool {
+        !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+        !psw.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
     var body: some View {
         GeometryReader{ geometry in
             ZStack(alignment: .center) {
@@ -67,6 +72,13 @@ struct LoginView: View {
                         Text("Oil Analysis Tool and Information Exchange")
                             .font(.system(size: 15))
                             //.padding(.bottom, 10)
+                        Picker("Login type", selection: $loginMode) {
+                            Text("User").tag(0)
+                            Text("Admin").tag(1)
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                        .frame(width: geometry.size.width*0.8)
+                        .padding(.top, 8)
                         VStack{
                             //Text("User Name").fontWeight(.bold)
                             TextField("Username",text:$name)
@@ -88,7 +100,7 @@ struct LoginView: View {
                         }.frame(width: geometry.size.width*0.8, height: 200.0)//////////////
                         
                         
-                        Button("Sign In") {
+                        Button {
                             se.loading=true
                             let camUrl=URL(string: cameraURL+"stat")!
                             AF.request(camUrl, method: .get)//try to connect with OilixCam first
@@ -102,10 +114,10 @@ struct LoginView: View {
                                 case .success:
                                     camDisconnectAlert=true
                                     break
-                                case .failure(let error):
+                                case .failure(_):
                                     se.name=name
                                     se.psw=psw
-                                    let res=se.login()
+                                    se.login(asAdmin: loginMode == 1)
                                     break
                                 }
                             }
@@ -120,16 +132,19 @@ struct LoginView: View {
                              showsAlert=false
                              print("showsAlert=false")
                              }
-                             */
+                            */
                             //print("err:")
                             //print(se.showAlert)
+                        } label: {
+                            Text(loginMode == 0 ? "Sign In" : "Admin Sign In")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .padding()
+                                .frame(width:geometry.size.width*0.6,height:60)
+                                .background(canSignIn ? Color.blue : Color.gray)
+                                .cornerRadius(35)
+                                .contentShape(Rectangle())
                         }
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding()
-                        .frame(width:geometry.size.width*0.6,height:60)
-                        .background(Color.gray)
-                        .cornerRadius(35)
                         .alert(isPresented: ($se.showAlert)) {
                             Alert(
                                 title: Text("Error"),
@@ -137,11 +152,13 @@ struct LoginView: View {
                                 message: Text(se.msg)
                             )
                         }
+                        .disabled(!canSignIn)
                         
                         VStack
                         {
-                            HStack{
-                                Text("No account?").font(.system(size:15))
+                            if loginMode == 0 {
+                                HStack{
+                                    Text("No account?").font(.system(size:15))
                                 /*
                                  Link(destination: URL(string: "https://answers.usgs.gov/")!, label: {
                                  Text("SIGN UP").font(.system(size:15))
@@ -149,10 +166,11 @@ struct LoginView: View {
                                  
                                  )
                                  */
-                                Button("Sign Up"){
-                                    reg=true
+                                    Button("Sign Up"){
+                                        reg=true
+                                    }
+                                    .font(.system(size:15))
                                 }
-                                .font(.system(size:15))
                             }
                             HStack{
                                 Button("Forgot Password?"){

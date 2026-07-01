@@ -11,6 +11,7 @@ import Alamofire
 import CoreML
 import Vision
 
+@MainActor
 class WaterSampleViewModel: ObservableObject{
     @Published var samples : [WaterSample] = []
     var count:Int{
@@ -23,10 +24,14 @@ class WaterSampleViewModel: ObservableObject{
         //localAnalyse(samples.count-1)//disabled until we have better local model
     }
     
-    func delete(_ i: Int){
-        if(i<samples.count){
-            samples.remove(at: i)
+    @discardableResult
+    func delete(_ i: Int) -> Bool{
+        guard samples.indices.contains(i) else {
+            return false
         }
+        
+        samples.remove(at: i)
+        return true
     }
     
     func deleteAll(){

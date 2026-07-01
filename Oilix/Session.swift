@@ -14,6 +14,9 @@ class Session: ObservableObject{
     @Published var showAlert: Bool = false
     @Published var loading=false
     @Published var msg="null"
+    @Published var isAdmin: Bool = false
+    @Published var displayName: String = ""
+    @Published var email: String = ""
     //var err=false
     @Published var access:String = ""
     @Published var refresh:String = ""
@@ -46,7 +49,7 @@ class Session: ObservableObject{
         defaults.set("",forKey: "access")
     }
     
-    func login()//->Bool
+    func login(asAdmin: Bool = false)//->Bool
     {
         //let url=URL(string:"http://66.42.127.2:3000/api/auth/token/obtain/")!
         //let url=URL(string:"http://45.63.68.161/api/auth/token/obtain/")!
@@ -70,7 +73,8 @@ class Session: ObservableObject{
         //urlRequest.httpBody=data
         
         //let url=URL(string:"https://wateroil.itongue.cn/login")!
-        let url=URL(string: serverURL+"login")!
+        let loginPath = asAdmin ? "adminlogin" : "login"
+        let url=URL(string: serverURL+loginPath)!
         //let url=URL(string:"https://47.100.22.28/login")!
         //let url=URL(string:"https://119.45.163.114/login")!
         //let url=URL(string:"http://47.100.22.28/login")!
@@ -78,16 +82,18 @@ class Session: ObservableObject{
         struct LoginResponse: Codable {
             var status: Int
             var msg: String
-            struct meta: Codable{
-                let username: String
-                let name: String
-                let email: String
+            var meta: LoginMeta?
+            
+            struct LoginMeta: Codable{
+                let username: String?
+                let name: String?
+                let email: String?
+                let attempted_username: String?
             }
-            //var msg: String
         }
         //var j1:LoginResponse=LoginResponse(status: 9, msg: "")
         //var j1:LoginResponse?
-        var j1:LoginResponse=LoginResponse(status: 9, msg: "")
+        var j1:LoginResponse=LoginResponse(status: 9, msg: "", meta: nil)
         //AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: nil)
         AF.request(url, method: .post, parameters: parameters, encoder: URLEncodedFormParameterEncoder(destination: .httpBody), headers: nil)
             .validate(statusCode: 200 ..< 299)
@@ -134,11 +140,15 @@ class Session: ObservableObject{
                 //showsAlert=false
                 if j1.status==0{
                     print("logged")
+                    self.isAdmin=asAdmin
+                    self.displayName=j1.meta?.name ?? ""
+                    self.email=j1.meta?.email ?? ""
                     self.isLoggedIn=true
                     self.showAlert=false
                     let defaults = UserDefaults()
                     defaults.set(self.name,forKey: "username")
                     defaults.set(self.psw,forKey: "password")
+                    defaults.set(self.isAdmin,forKey: "isAdmin")
                     //defaults.set(self.access,forKey: "access")
                 }else{
                     self.showAlert=true
@@ -187,6 +197,9 @@ class Session: ObservableObject{
                 }
                 print("loggout")
                 self.isLoggedIn=false
+                self.isAdmin=false
+                self.displayName=""
+                self.email=""
                 self.showAlert=false
                 //let defaults = UserDefaults()
                 //defaults.set(self.name,forKey: "username")
@@ -234,10 +247,96 @@ class Session: ObservableObject{
                 }
                 print("user deleted")
                 self.isLoggedIn=false
+                self.isAdmin=false
+                self.displayName=""
+                self.email=""
                 self.showAlert=false
             }
         name=""
         psw=""
+    }
+    
+    func refreshProfile(completed: ((Bool, String) -> Void)? = nil) {
+        let url=URL(string: serverURL+"user")!
+        
+        AF.request(url, method: .get, encoding: JSONEncoding.default, headers: nil)
+            .validate(statusCode: 200 ..< 299)
+            .responseJSON { AFdata in
+                do {
+                    struct UserResponse: Codable {
+                        var status: Int
+                        var msg: UserProfile?
+                        var meta: UserMeta?
+                        
+                        struct UserProfile: Codable {
+                            let username: String
+                            let name: String
+                            let email: String
+                        }
+                        
+                        struct UserMeta: Codable {
+                            let attempted_username: String?
+                        }
+                    }
+                    
+                    guard let data=AFdata.data else {
+                        completed?(false, "Network error. Please try again.")
+                        return
+                    }
+                    
+                    let response = try JSONDecoder().decode(UserResponse.self, from: data)
+                    if response.status == 0, let profile = response.msg {
+                        self.name = profile.username
+                        self.displayName = profile.name
+                        self.email = profile.email
+                        completed?(true, "Profile loaded.")
+                    } else {
+                        completed?(false, response.meta?.attempted_username ?? "Unable to load profile.")
+                    }
+                } catch {
+                    completed?(false, "Network error. Please try again.")
+                }
+            }
+    }
+    
+    func updateProfile(displayName: String, email: String, completed: @escaping (Bool, String) -> Void) {
+        let url=URL(string: serverURL+"user")!
+        let parameters=["name":displayName,"email":email]
+        
+        AF.request(url, method: .post, parameters: parameters, encoder: URLEncodedFormParameterEncoder(destination: .httpBody), headers: nil)
+            .validate(statusCode: 200 ..< 299)
+            .responseJSON { AFdata in
+                do {
+                    struct UserUpdateResponse: Codable {
+                        var status: Int
+                        var msg: String
+                        var meta: UserMeta?
+                        
+                        struct UserMeta: Codable {
+                            let username: String?
+                            let name: String?
+                            let email: String?
+                            let attempted_username: String?
+                        }
+                    }
+                    
+                    guard let data=AFdata.data else {
+                        completed(false, "Network error. Please try again.")
+                        return
+                    }
+                    
+                    let response = try JSONDecoder().decode(UserUpdateResponse.self, from: data)
+                    if response.status == 0 {
+                        self.displayName=response.meta?.name ?? displayName
+                        self.email=response.meta?.email ?? email
+                        completed(true, response.msg)
+                    } else {
+                        completed(false, response.msg)
+                    }
+                } catch {
+                    completed(false, "Network error. Please try again.")
+                }
+            }
     }
     
 }

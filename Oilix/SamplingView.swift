@@ -9,6 +9,8 @@ import SwiftUI
 import Alamofire
 import PhotosUI
 import MapKit
+import ImageIO
+import UniformTypeIdentifiers
 struct MetaRS: Codable{
     var result: String
     var attempted_username: String
@@ -80,6 +82,9 @@ struct SamplingView: View {
     @State private var deleteAlert=false
     @State private var locationUpdateAlert=false
     @State private var photoDeniedAlert=false
+    @State private var filePicker=false
+    @State private var fileImportAlert=false
+    @State private var fileImportMessage=""
     @State var region = MKCoordinateRegion(
         center: CLLocationCoordinate2D(
             latitude:10,//38.952,
@@ -113,23 +118,6 @@ struct SamplingView: View {
     var body: some View {
         VStack{
             HStack{
-                Button {
-                    startOverAlert=true
-                } label: {
-                    Image(systemName: "arrow.uturn.left.square")
-                        .font(.system(size:25))
-                }
-                .disabled(samples.count==0)
-                .alert(isPresented: $startOverAlert) {
-                    Alert(title: Text("Caution"), message: Text("Start over?"), primaryButton: .destructive(Text("Confirm"), action: {
-                        //print("ellipsis1")
-                        previewN=0
-                        samples.deleteAll()
-                    }), secondaryButton: .default(Text("Cancel")))
-                    
-                    
-                }
-                
                 Spacer()
                 if(samples.count > 0){
                     Text("\(previewN+1) of \(samples.count)")
@@ -149,19 +137,14 @@ struct SamplingView: View {
                         Text("Take From "+deviceName)
                     }
                     Button {
-                        PHPhotoLibrary.requestAuthorization(for: .readWrite) {  status in
-                            //DispatchQueue.main.async { [unowned self] in
-                            if(status.rawValue != 0 && status.rawValue != 2)
-                            {
-                                picker=true
-                            }
-                            else{
-                                photoDeniedAlert=true
-                            }
-                            //}
-                        }
+                        picker=true
                     } label: {
                         Text("Choose From Library")
+                    }
+                    Button {
+                        filePicker=true
+                    } label: {
+                        Text("Choose From Files")
                     }
 
                     Button("Cancel", role: .cancel){
@@ -263,12 +246,7 @@ struct SamplingView: View {
                                 if(se.deleteConfirm){
                                     deleteAlert=true
                                 }else{
-                                    if(previewN == samples.count-1 && previewN != 0){
-                                        previewN-=1
-                                        samples.delete(previewN+1)
-                                    }else{
-                                        samples.delete(previewN)
-                                    }
+                                    deleteCurrentImage()
                                 }
                             } label: {
                                 VStack{
@@ -282,19 +260,6 @@ struct SamplingView: View {
                                 }
                             }
                             .padding(.all)
-                            .alert(isPresented: $deleteAlert) {
-                                Alert(title: Text("Caution"), message: Text("Delete this image?"), primaryButton: .destructive(Text("Delete"), action: {
-                                    if(previewN == samples.count-1 && previewN != 0){
-                                        previewN-=1
-                                        samples.delete(previewN+1)
-                                    }else{
-                                        samples.delete(previewN)
-                                    }
-                                    
-                                }), secondaryButton: .default(Text("Cancel")))
-                                
-                                
-                            }
                             Divider()
                             Button {
                                 //print("note")
@@ -640,6 +605,20 @@ struct SamplingView: View {
             }
         }
         .navigationTitle("Upload")
+        .alert(isPresented: $fileImportAlert) {
+            Alert(
+                title: Text("Import Failed"),
+                message: Text(fileImportMessage),
+                dismissButton: .default(Text("Dismiss"))
+            )
+        }
+        .confirmationDialog("Delete this image?", isPresented: $deleteAlert, titleVisibility: .visible) {
+            Button("Delete", role: .destructive) {
+                deleteCurrentImage()
+            }
+            Button("Cancel", role: .cancel) {
+            }
+        }
         .sheet(isPresented: $picker, content: {
             //PhotoPicker(pickedImage: $pickedImage)
             //ImagePicker(images:$images, locations:$locations, notes:$notes, times:$times, picker:$picker,  attr: $attr)
@@ -652,11 +631,138 @@ struct SamplingView: View {
         .sheet(isPresented: $noteSheet) {
             NoteView(samples: samples, i: $previewN, noteSheet: $noteSheet)
         }
+        .fileImporter(isPresented: $filePicker, allowedContentTypes: [.image], allowsMultipleSelection: true) { result in
+            importFiles(result)
+        }
+        .onChange(of: samples.count) { _ in
+            clampPreviewIndex()
+        }
         //pickedImage
         //let nsd=pickedImage.jpegData(compressionQuality: 1)
         
         //let metadata =  CGImageSourceCopyPropertiesAtIndex(cgis,0,nil)
         //let imgexif=CFDictionaryGetValue(metadata, kCGImagePropertyExifDictionary)
+    }
+    
+    private func deleteCurrentImage() {
+        guard samples.count > 0 else {
+            previewN = 0
+            return
+        }
+        
+        let deletedIndex = min(previewN, samples.count - 1)
+        let remainingCount = samples.count - 1
+        guard samples.delete(deletedIndex) else {
+            clampPreviewIndex()
+            return
+        }
+        
+        if remainingCount == 0 {
+            previewN = 0
+        } else {
+            previewN = min(deletedIndex, remainingCount - 1)
+        }
+    }
+    
+    private func clampPreviewIndex() {
+        if samples.count == 0 {
+            previewN = 0
+        } else {
+            previewN = min(max(previewN, 0), samples.count - 1)
+        }
+    }
+    
+    private func importFiles(_ result: Result<[URL], Error>) {
+        switch result {
+        case .success(let urls):
+            var importedCount = 0
+            for url in urls {
+                if importFile(url) {
+                    importedCount += 1
+                }
+            }
+            if !urls.isEmpty && importedCount == 0 {
+                fileImportMessage = "No supported images were imported from Files."
+                fileImportAlert = true
+            }
+        case .failure:
+            fileImportMessage = "Oilix couldn't read the selected file."
+            fileImportAlert = true
+        }
+    }
+    
+    private func importFile(_ url: URL) -> Bool {
+        let accessed = url.startAccessingSecurityScopedResource()
+        defer {
+            if accessed {
+                url.stopAccessingSecurityScopedResource()
+            }
+        }
+        
+        guard let imageData = try? Data(contentsOf: url),
+              let image = UIImage(data: imageData) else {
+            return false
+        }
+        
+        let imageSource = CGImageSourceCreateWithData(imageData as CFData, nil)
+        let metadata = imageSource.flatMap {
+            CGImageSourceCopyPropertiesAtIndex($0, 0, nil) as? [CFString: Any]
+        }
+        
+        DispatchQueue.main.async {
+            samples.add(
+                image: image,
+                location: fileLocation(from: metadata),
+                times: fileDate(from: url, metadata: metadata)
+            )
+        }
+        return true
+    }
+    
+    private func fileLocation(from metadata: [CFString: Any]?) -> String {
+        guard let gps = metadata?[kCGImagePropertyGPSDictionary] as? [CFString: Any],
+              let latitudeValue = gps[kCGImagePropertyGPSLatitude] as? NSNumber,
+              let longitudeValue = gps[kCGImagePropertyGPSLongitude] as? NSNumber else {
+            return "0.0,0.0"
+        }
+        
+        var latitude = latitudeValue.doubleValue
+        var longitude = longitudeValue.doubleValue
+        
+        if let latitudeRef = gps[kCGImagePropertyGPSLatitudeRef] as? String,
+           latitudeRef.uppercased() == "S" {
+            latitude *= -1
+        }
+        if let longitudeRef = gps[kCGImagePropertyGPSLongitudeRef] as? String,
+           longitudeRef.uppercased() == "W" {
+            longitude *= -1
+        }
+        
+        return "\(latitude),\(longitude)"
+    }
+    
+    private func fileDate(from url: URL, metadata: [CFString: Any]?) -> Date {
+        if let exif = metadata?[kCGImagePropertyExifDictionary] as? [CFString: Any],
+           let originalDate = exif[kCGImagePropertyExifDateTimeOriginal] as? String,
+           let parsedDate = parseImageDate(originalDate) {
+            return parsedDate
+        }
+        
+        if let tiff = metadata?[kCGImagePropertyTIFFDictionary] as? [CFString: Any],
+           let tiffDate = tiff[kCGImagePropertyTIFFDateTime] as? String,
+           let parsedDate = parseImageDate(tiffDate) {
+            return parsedDate
+        }
+        
+        let resourceValues = try? url.resourceValues(forKeys: [.creationDateKey, .contentModificationDateKey])
+        return resourceValues?.creationDate ?? resourceValues?.contentModificationDate ?? Date()
+    }
+    
+    private func parseImageDate(_ value: String) -> Date? {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy:MM:dd HH:mm:ss"
+        return formatter.date(from: value)
     }
 }
 

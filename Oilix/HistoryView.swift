@@ -38,6 +38,8 @@ struct HistoryView: View {
     @State var mode=1
     @State var ent=false
     @ObservedObject var hist = History()
+    @StateObject var locationManager = LocationManager()
+    @State private var centeredOnUserLocation = false
     @State var region = MKCoordinateRegion(
         center: CLLocationCoordinate2D(
             latitude:38.952,
@@ -76,15 +78,44 @@ struct HistoryView: View {
                 NavigationView{
                     //List(0..<15){item in
                     List(hist.data, id:\.id){item in
-                        HStack{
-                            //Image(systemName: "photo.on.rectangle")
-                            Image(systemName: "note.text")
-                            Text(": ")
-                            //Text("\(item.result)")
-                            Text("\(item.notes)")
-                                .lineLimit(2)
+                        HStack(spacing: 12){
+                            AsyncImage(url: historyImageURL(for: item.path)){phase in
+                                switch phase{
+                                case .empty:
+                                    ZStack{
+                                        Rectangle()
+                                            .fill(lGrey2)
+                                        ProgressView()
+                                    }
+                                case .success(let image):
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                case .failure:
+                                    ZStack{
+                                        Rectangle()
+                                            .fill(lGrey2)
+                                        Image(systemName: "photo")
+                                            .foregroundColor(.gray)
+                                    }
+                                @unknown default:
+                                    EmptyView()
+                                }
+                            }
+                            .frame(width: 64, height: 64)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            
+                            VStack(alignment: .leading, spacing: 6){
+                                HStack{
+                                    Image(systemName: "note.text")
+                                    Text(":")
+                                    Text("\(item.notes)")
+                                        .lineLimit(2)
+                                }
+                                Spacer(minLength: 0)
+                            }
                             Spacer()
-                            VStack{
+                            VStack(alignment: .leading, spacing: 6){
                                 //NavigationLink(destination: EntryView(ent:$ent,region: $region, entry:item)) {
                                     //Text(item.id.uuidString)
                                     Text(dateFormatter.string(from:item.date))
@@ -93,8 +124,8 @@ struct HistoryView: View {
                                     }
                                     else{
                                         HStack{
-                                        Image(systemName: "testtube.2")
-                                        Text(": \(item.result)")
+                                            Image(systemName: "testtube.2")
+                                            Text(": \(item.result)")
                                         }
                                     }
                                 //}
@@ -118,7 +149,7 @@ struct HistoryView: View {
             {
                 Spacer()
                 if se.disperse{
-                    Map(coordinateRegion:$region2, annotationItems: hist.data, annotationContent:  { lo in
+                    Map(coordinateRegion:$region2, showsUserLocation: true, annotationItems: hist.data, annotationContent:  { lo in
                         MapAnnotation(coordinate: CLLocationCoordinate2D(latitude:(lo.locat?.latitude ?? 38.912)+lo.disperseX,longitude:(lo.locat?.longitude ?? -92.277)+lo.disperseY)){
                             PinView(res: lo.result)
                                 .shadow(radius: 10)
@@ -134,7 +165,7 @@ struct HistoryView: View {
                     })
                 }
                 else{
-                    Map(coordinateRegion:$region2, annotationItems: hist.data, annotationContent:  { lo in
+                    Map(coordinateRegion:$region2, showsUserLocation: true, annotationItems: hist.data, annotationContent:  { lo in
                         MapAnnotation(coordinate: lo.locat ?? CLLocationCoordinate2D(latitude:38.912,longitude:-92.277)) {
                             PinView(res: lo.result)
                                 .shadow(radius: 10)
@@ -160,6 +191,15 @@ struct HistoryView: View {
             dateFormatter.dateFormat = "MM/dd/YYYY"
             
             hist.getHistory()
+            centerMapOnCurrentLocationIfNeeded()
+        }
+        .onChange(of: mode) { newMode in
+            if newMode == 2 {
+                centerMapOnCurrentLocationIfNeeded()
+            }
+        }
+        .onReceive(locationManager.$lastLocation.compactMap { $0 }) { location in
+            centerMap(on: location)
         }
         .onDisappear {
             //print("history test2")
@@ -167,6 +207,32 @@ struct HistoryView: View {
         .sheet(isPresented: $ent, content: {
             EntryView(ent:$ent, region: $region, entry:$itemEnt)
         })
+    }
+    
+    private func historyImageURL(for path: String) -> URL? {
+        if path.hasPrefix("http://") || path.hasPrefix("https://") {
+            return URL(string: path)
+        }
+        
+        return URL(string: serverURL + path)
+    }
+    
+    private func centerMapOnCurrentLocationIfNeeded() {
+        guard let location = locationManager.lastLocation else {
+            return
+        }
+        
+        centerMap(on: location)
+    }
+    
+    private func centerMap(on location: CLLocation) {
+        guard !centeredOnUserLocation else {
+            return
+        }
+        
+        region2.center = location.coordinate
+        region2.span = MKCoordinateSpan(latitudeDelta: 0.2, longitudeDelta: 0.2)
+        centeredOnUserLocation = true
     }
 }
 
