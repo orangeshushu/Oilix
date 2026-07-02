@@ -1,0 +1,12 @@
+pymysql
+tornado
+python-dateutil
+sqlalchemy
+packaging
+sqlalchemy_utils
+opencv-python
+scikit-learn==1.0.2
+scipy
+matplotlib
+geopy
+redis

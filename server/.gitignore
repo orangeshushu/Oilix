@@ -1,0 +1,17 @@
+.DS_Store
+.cookie_secret
+*.log
+*.pyc
+__pycache__/
+
+# Production uploads and generated data
+static/images/
+
+# Runtime model weights are stored outside Git.
+model/
+*.pt
+*.pth
+*.pkl
+
+# Binary app distribution artifacts
+static/console/public/assets/*.apk

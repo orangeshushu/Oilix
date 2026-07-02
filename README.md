@@ -32,6 +32,17 @@ Oilix is an iOS app for sampling water/oil images, uploading samples, and review
 - History: supports list and map views for uploaded samples.
 - Settings: supports delete confirmation preference, profile display, profile editing, account deletion, logout, and administrator-only user list access.
 
+## Web Console and Server
+
+The website/server code is stored in `server/`.
+
+- Tornado backend entry point: `server/main.py`
+- API handlers: `server/handlers/`
+- Routes and configuration: `server/settings/`
+- Admin web console: `server/static/console/`
+
+Production logs, uploaded sample images, cookie secrets, database passwords, model weights, and APK artifacts are intentionally excluded from Git. See `server/README.md` for deployment notes and required environment variables.
+
 ## Running Locally
 
 1. Open `Oilix.xcodeproj` in Xcode.
