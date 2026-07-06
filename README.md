@@ -1,6 +1,16 @@
-# Oilix Code Repository
+# Oilix
 
-This repository contains the Oilix iOS app code and the website/server code currently synced from production.
+Oilix is an integrated water/oil contamination sampling and management system. The project includes an iOS app for field sampling, a web console for administrative review, and a Tornado backend that stores users, uploaded samples, metadata, and analysis results.
+
+The system is designed around a simple workflow: a field user captures or selects a sample image, confirms the sample time and GPS location, adds notes when needed, and uploads the sample to the backend. The backend stores the image and related metadata, runs or records the analysis result, and exposes the data to the mobile history screen and the web console. Administrators can use the website to review uploaded samples, search/filter records, edit sample metadata, manage tags and notes, and view registered users.
+
+This repository keeps the mobile app and website/server code together so the project can be rebuilt, reviewed, and handed off from one place. Production-only data and secrets are intentionally excluded from Git.
+
+## System Components
+
+- iOS app: field sampling, image selection/capture, GPS metadata, notes, upload, history list, and history map.
+- Website frontend: browser-based console for administrator login, sample review, filtering, editing, and user review.
+- Backend server: Tornado API service for authentication, upload handling, history retrieval, admin operations, user profile data, and database access.
 
 ## Repository Structure
 
