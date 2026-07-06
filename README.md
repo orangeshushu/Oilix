@@ -25,6 +25,28 @@ server/settings/             Backend routes, models, and configuration
 server/utils/                Backend utility code
 ```
 
+## Sync Audit
+
+Audit status: at the time of this review, `main` was synced with `origin/main`.
+
+Uploaded to GitHub:
+
+- iOS app source, Xcode project, app assets, Core ML model files used by the app, and Swift Package resolution file.
+- Website frontend files under `server/static/console/`.
+- Website backend files under `server/main.py`, `server/handlers/`, `server/settings/`, and `server/utils/`.
+- Server documentation and ignore rules.
+
+Not uploaded because they are not source code or contain production/runtime data:
+
+- macOS and Xcode local state files such as `.DS_Store` and `*.xcuserstate`.
+- Server logs and Python cache files.
+- Production uploaded sample images.
+- Production cookie secret, database password, and SSL private key.
+- Large server-side ML model weights and APK distribution artifacts.
+- Old production backup files such as `*.bak`.
+
+Conclusion: no active iOS app code or active website frontend/backend code is currently missing from GitHub. Full production restoration still requires the excluded runtime artifacts listed in `server/README.md`.
+
 ## iOS App
 
 - Version: `2.0.4`
@@ -33,7 +55,15 @@ server/utils/                Backend utility code
 - Minimum iOS version: `15.0`
 - Backend URL used by the app: `https://wateroil.covlab.tech/`
 
-Run locally:
+Reproduce locally:
+
+1. Open `Oilix.xcodeproj` in Xcode.
+2. Let Xcode resolve Swift Package dependencies from `Package.resolved`.
+3. Select the `Oilix` scheme.
+4. Choose an iOS simulator or a signed physical device.
+5. Build and run.
+
+Command-line build:
 
 ```sh
 xcodebuild -project Oilix.xcodeproj \
@@ -43,7 +73,11 @@ xcodebuild -project Oilix.xcodeproj \
   build
 ```
 
-Or open `Oilix.xcodeproj` in Xcode and run the `Oilix` scheme.
+Notes:
+
+- The app backend URL is defined in `Oilix/OilixApp.swift` as `https://wateroil.covlab.tech/`.
+- A physical-device build may require a valid Apple Developer Team and signing setup.
+- The Oilix camera workflow expects the camera access point/device constants defined in `Oilix/OilixApp.swift`.
 
 ## Website Code
 
@@ -53,7 +87,7 @@ The website code is in `server/`.
 - Backend: `server/main.py`, `server/handlers/`, `server/settings/`, `server/utils/`
 - Website entry page: `/static/console/index.html#/login`
 
-See `server/README.md` for server environment variables and deployment notes.
+See `server/README.md` for exact server reproduction steps, required environment variables, database setup notes, and excluded runtime artifact names.
 
 ## Not Included
 
