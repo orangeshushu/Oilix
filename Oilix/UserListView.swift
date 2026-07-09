@@ -2,8 +2,6 @@
 //  UserListView.swift
 //  Oilix
 //
-//  Created by OpenAI Codex on 4/29/26.
-//
 
 import SwiftUI
 import Alamofire
