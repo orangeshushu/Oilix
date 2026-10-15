@@ -67,6 +67,16 @@ Production URL path:
 
 To serve the same frontend, deploy `static/console/` with the Tornado server or another static file server that exposes the same path.
 
+The iOS app and web console use the same API and database at `https://wateroil.covlab.tech/`. Image paths returned by that API resolve against this origin. `/history` returns the signed-in account's samples; `/adminphotolist` returns all samples to an administrator, with page, minimum-date, and maximum-date parameters. The mobile administrator view defaults to All Samples and can switch to My Samples. Each view fetches every page before presenting its date-sorted list and map.
+
+Static and template directories are resolved from `settings/configs.py`, not the process entry point. This matters when the service is started by a wrapper outside the application directory: a wrapper must still serve `server/static/`, including both `console/` and uploaded `images/`. Keep the process working directory at the backend root for the existing relative upload and model paths.
+
+Run the isolated path and access-control regression checks without a database or model weights:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s server/tests -v
+```
+
 ## Backend Requirements
 
 Core dependencies are listed in `requirement.txt`. The copied production dependency file does not fully capture every import used by the model and maintenance scripts. For a fresh environment, also make sure these packages are available:

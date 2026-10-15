@@ -1,172 +1,111 @@
-//
-//  ImagePicker.swift
-//  Oilix
-//
-//  Created by Guo, Congyu on 12/6/21.
-//
-
-
 import SwiftUI
 import PhotosUI
-/*
- import ImageIO
- 
- struct PhotoPicker: UIViewControllerRepresentable{
- @Binding var pickedImage: UIImage
- func makeUIViewController(context: Context) -> some UIViewController {
- let picker=UIImagePickerController()
- picker.delegate=context.coordinator
- picker.allowsEditing=true
- return picker
- }
- func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {}
- 
- func makeCoordinator() -> Coordinator {
- return Coordinator(photoPicker: self)
- }
- 
- final class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate{
- let photoPicker: PhotoPicker
- init(photoPicker: PhotoPicker){
- self.photoPicker=photoPicker
- }
- func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
- if let image = info[.editedImage] as? UIImage{
- guard let data=image.jpegData(compressionQuality: 1), let jpegImage=UIImage(data: data) else{
- return
- }
- photoPicker.pickedImage=jpegImage
- 
- let imageURL = info[UIImagePickerController.InfoKey.referenceURL]
- let imageData = image.pngData()
- let cgis = CGImageSourceCreateWithData(imageData! as CFData, nil)!
- let cgis2 = CGImageSourceCreateWithURL(imageURL as! CFURL, nil)!
- var tm = CGImageSourceCopyPropertiesAtIndex(cgis2, 0, nil) as? [AnyHashable: Any]
- print(tm)
- }else{
- 
- }
- picker.dismiss(animated: true)
- }
- }
- }
- */
-struct ImagePicker : UIViewControllerRepresentable{
-    
-    func makeCoordinator() -> Coordinator {
-        return ImagePicker.Coordinator(parent1: self)
-    }
-    
-    /*
-    @Binding var images : [UIImage]
-    @Binding var locations : [String]
-    @Binding var notes : [String]
-    @Binding var times : [Date]
-     */
-    @Binding var picker : Bool
-    //@Binding var attr : String
-    
-    @StateObject var samples : WaterSampleViewModel
-    
-    func makeUIViewController(context: Context) -> some PHPickerViewController {
-        let photoLibrary = PHPhotoLibrary.shared()
-        var config=PHPickerConfiguration(photoLibrary: photoLibrary)
-        config.filter = .images
-        config.selectionLimit=0
-        config.preferredAssetRepresentationMode = .current
-        let picker=PHPickerViewController(configuration: config)
-        picker.delegate=context.coordinator
-        return picker
-    }
-    
-    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-        
-    }
-    
-    class Coordinator: NSObject, PHPickerViewControllerDelegate{
-        var parent : ImagePicker
-        init(parent1: ImagePicker){
-            parent=parent1
-        }
-        func picker(_ picker: PHPickerViewController, didFinishPicking results:[PHPickerResult]){
-            
-            print(results.count)
-            
-            
-            
-            parent.picker=false
-        
-            //print(parent.picker)
-            
-            for img in results{
-                if img.itemProvider.canLoadObject(ofClass: UIImage.self){
-                    img.itemProvider.loadObject(ofClass: UIImage.self) { (image, err) in
-                        guard let image1=image as? UIImage else{
-                            print(err)
-                            return
-                        }
-                        
-                        var cr = Date.now
-                        var teststring = "0,0"
-                        if let assetId = img.assetIdentifier {
-                            let assetResults = PHAsset.fetchAssets(withLocalIdentifiers: [assetId], options: nil)
+import ImageIO
+import UniformTypeIdentifiers
 
-                            //print("resultcount:",assetResults.count)
-                            print("date:", assetResults.firstObject?.creationDate ?? "No date")
-                            //print(assetResults.firstObject?.location?.coordinate ?? "No location")
-                            //let fo = assetResults.firstObject!//may found nil if not allowed for access photo
-                            guard let fo = assetResults.firstObject else{
-                                print("may not be allowed to access photo")
-                                DispatchQueue.main.async {
-                                    self.parent.samples.add(image: image1, location: teststring, times: cr)
-                                }
-                                return
-                            }
-                            cr = fo.creationDate ?? Date.now
-                            //self.parent.times.append(cr)
-                            if let location = fo.location?.coordinate{
-                                teststring = String(location.latitude) + "," + String(location.longitude)
-                                
-                            }
-                            else{
-                                teststring = "0,0"//used to be "no location, "
-                            }
-                            //let dateFormatter = DateFormatter()
-                            //dateFormatter.dateFormat = "MM/dd/y HH:mm"
-                            //teststring = teststring + " " + dateFormatter.string(from: cr)
-                            //self.parent.attr = teststring
-//                            if let coor = assetResults.firstObjects.location?.coordinate {
-//                                parent.attr = String(coor)
-//                            }else{
-//
-//                            }
-                            //print(assetResults.firstObject)
-                            //print(assetResults.firstObject?.mediaType.rawValue)
-                            //print(assetResults.firstObject?.sourceType.rawValue)
-                            //print(assetResults.firstObject?.sourceType.
-                            //let o=assetResults[
-                            //self.parent.locations.append(teststring)
-                            print(teststring)
-                            //self.parent.notes.append("\(Int.random(in: 1...100))")
-                          }
-                        else{
-                            print(img.assetIdentifier)
-                        }
-                        
-                        DispatchQueue.main.async {
-                            self.parent.samples.add(image: image1, location: teststring, times: cr)
-                        }
- 
-                        //let identifiers=results.compactMap(\.assetIdentifier)
-                        //let fetchResult=PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
-                        //print(identifiers.count)
-                        //print(identifiers)
-                        //print(results)
-                        //print(fetchResult)
-                        
-                        //self.parent.images.append(image1 as! UIImage)
-                    }
+struct ImportedSample {
+    let image: UIImage
+    let location: String
+    let date: Date
+}
+
+enum SampleImageReader {
+    static func read(_ data: Data, fallbackDate: Date = Date()) -> ImportedSample? {
+        guard let image = UIImage(data: data) else { return nil }
+        let source = CGImageSourceCreateWithData(data as CFData, nil)
+        let metadata = source.flatMap { CGImageSourceCopyPropertiesAtIndex($0, 0, nil) as? [CFString: Any] }
+        var location = "0,0"
+        if let gps = metadata?[kCGImagePropertyGPSDictionary] as? [CFString: Any],
+           let lat = gps[kCGImagePropertyGPSLatitude] as? NSNumber,
+           let lon = gps[kCGImagePropertyGPSLongitude] as? NSNumber {
+            let latitude = lat.doubleValue * ((gps[kCGImagePropertyGPSLatitudeRef] as? String)?.uppercased() == "S" ? -1 : 1)
+            let longitude = lon.doubleValue * ((gps[kCGImagePropertyGPSLongitudeRef] as? String)?.uppercased() == "W" ? -1 : 1)
+            let value = "\(latitude),\(longitude)"
+            if History.getLocation(locStr: value) != nil { location = value }
+        }
+        let exif = metadata?[kCGImagePropertyExifDictionary] as? [CFString: Any]
+        let tiff = metadata?[kCGImagePropertyTIFFDictionary] as? [CFString: Any]
+        let rawDate = exif?[kCGImagePropertyExifDateTimeOriginal] as? String ?? tiff?[kCGImagePropertyTIFFDateTime] as? String
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy:MM:dd HH:mm:ss"
+        let date = rawDate.flatMap { formatter.date(from: $0) } ?? fallbackDate
+        return ImportedSample(image: image, location: location, date: date)
+    }
+}
+
+struct ImagePicker: UIViewControllerRepresentable {
+    @Binding var picker: Bool
+    @ObservedObject var samples: WaterSampleViewModel
+    var onImportError: (String) -> Void = { _ in }
+
+    func makeCoordinator() -> Coordinator { Coordinator(parent: self) }
+
+    func makeUIViewController(context: Context) -> PHPickerViewController {
+        var configuration = PHPickerConfiguration(photoLibrary: .shared())
+        configuration.filter = .images
+        configuration.selectionLimit = 0
+        configuration.selection = .ordered
+        configuration.preferredAssetRepresentationMode = .current
+        let controller = PHPickerViewController(configuration: configuration)
+        controller.delegate = context.coordinator
+        return controller
+    }
+    func updateUIViewController(_ view: PHPickerViewController, context: Context) { }
+
+    @MainActor
+    final class Coordinator: NSObject, PHPickerViewControllerDelegate {
+        let parent: ImagePicker
+        private var results: [PHPickerResult] = []
+        init(parent: ImagePicker) { self.parent = parent }
+
+        func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+            parent.picker = false
+            guard !results.isEmpty else { return }
+            self.results = results
+            let generation = parent.samples.beginImport(total: results.count)
+            load(results, at: 0, failed: 0, generation: generation)
+        }
+
+        private func load(_ results: [PHPickerResult], at index: Int, failed: Int, generation: Int) {
+            guard parent.samples.isImporting, parent.samples.importGeneration == generation else { return }
+            guard index < results.count else { return }
+            let result = results[index]
+            let provider = result.itemProvider
+            guard let type = provider.registeredTypeIdentifiers.first(where: { UTType($0)?.conforms(to: .image) == true }) else {
+                finish(results, at: index, sample: nil, failed: failed, generation: generation)
+                return
+            }
+            var fallbackDate = Date()
+            var fallbackLocation: String?
+            let authorization = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+            if (authorization == .authorized || authorization == .limited), let id = result.assetIdentifier,
+               let asset = PHAsset.fetchAssets(withLocalIdentifiers: [id], options: nil).firstObject {
+                fallbackDate = asset.creationDate ?? fallbackDate
+                if let coordinate = asset.location?.coordinate { fallbackLocation = "\(coordinate.latitude),\(coordinate.longitude)" }
+            }
+            let date = fallbackDate
+            let location = fallbackLocation
+            let progress = provider.loadDataRepresentation(forTypeIdentifier: type) { data, _ in
+                let imported = data.flatMap { SampleImageReader.read($0, fallbackDate: date) }
+                let sample = imported.map {
+                    ImportedSample(image: $0.image, location: $0.location == "0,0" ? location ?? $0.location : $0.location, date: $0.date)
                 }
+                DispatchQueue.main.async {
+                    self.finish(self.results, at: index, sample: sample, failed: failed, generation: generation)
+                }
+            }
+            parent.samples.trackImport(progress, generation: generation)
+        }
+
+        private func finish(_ results: [PHPickerResult], at index: Int, sample: ImportedSample?, failed: Int, generation: Int) {
+            guard parent.samples.isImporting, parent.samples.importGeneration == generation else { return }
+            if let sample = sample { parent.samples.add(image: sample.image, location: sample.location, times: sample.date) }
+            let failures = failed + (sample == nil ? 1 : 0)
+            parent.samples.updateImport(completed: index + 1, total: results.count, generation: generation)
+            if index + 1 < results.count { load(results, at: index + 1, failed: failures, generation: generation) }
+            else if failures > 0 {
+                parent.onImportError("\(results.count - failures) of \(results.count) images imported. Some images could not be read or downloaded from iCloud. Choose those images again to retry.")
             }
         }
     }

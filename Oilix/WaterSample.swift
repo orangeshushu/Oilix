@@ -14,6 +14,36 @@ import Vision
 @MainActor
 class WaterSampleViewModel: ObservableObject{
     @Published var samples : [WaterSample] = []
+    @Published private(set) var isImporting = false
+    @Published private(set) var importStatus = ""
+    private(set) var importGeneration = 0
+    private var importRequest: Progress?
+
+    func beginImport(total: Int) -> Int {
+        cancelImport()
+        isImporting = true
+        importStatus = "Importing 1 of \(total) images..."
+        return importGeneration
+    }
+
+    func trackImport(_ progress: Progress, generation: Int) {
+        if isImporting && generation == importGeneration { importRequest = progress }
+        else { progress.cancel() }
+    }
+
+    func updateImport(completed: Int, total: Int, generation: Int) {
+        guard generation == importGeneration, isImporting else { return }
+        if completed >= total { isImporting = false; importRequest = nil; importStatus = "" }
+        else { importStatus = "Importing \(completed + 1) of \(total) images..." }
+    }
+
+    func cancelImport() {
+        importGeneration += 1
+        importRequest?.cancel()
+        importRequest = nil
+        isImporting = false
+        importStatus = ""
+    }
     var count:Int{
         return samples.count
     }
@@ -157,7 +187,8 @@ class WaterSampleViewModel: ObservableObject{
     }
 }
 
-struct WaterSample{
+struct WaterSample: Identifiable {
+    let id = UUID()
     var image : UIImage
     var location : String
     var note : String

@@ -22,7 +22,7 @@ let serverURL="https://wateroil.covlab.tech/"
 
 @main
 struct OilixApp: App {
-    let se=Session()
+    @StateObject private var se = Session()
     var body: some Scene {
         WindowGroup {
             ContentView(se: se)

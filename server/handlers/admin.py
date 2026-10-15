@@ -90,6 +90,10 @@ class AdminLoginHandler(BaseHandler):
 class AdminPhotoListHandler(BaseHandler):
     def post(self):
         account = self.getAccount()
+        if account is not None and not account.role:
+            self.set_status(403)
+            self.write(json.dumps({'status': 7, 'msg': 'Administrator access required.', 'meta': {}}))
+            return
         if account is None:
             info['status'] = 8
             info['msg'] = 'Login timeout.'
@@ -309,4 +313,3 @@ class DeletePhotoMultiHandler(BaseHandler):
                 info['msg'] = 'Error occurred, please report the following reference codes. REF_CODE_A: ' + ref_code.split('.')[0] + ', REF_CODE_B: ' + ref_code.split('.')[1] + '.'
             info['meta']['attempted_username'] = account.username
         self.write(json.dumps(info))
-

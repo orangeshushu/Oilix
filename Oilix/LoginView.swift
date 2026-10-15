@@ -1,269 +1,274 @@
-//
-//  LoginView.swift
-//  Oilix
-//
-//  Created by Guo, Congyu on 11/23/21.
-//
-
 import SwiftUI
 import Alamofire
-
-//let lGrey=Color(red:239.0/255.0, green:243.0/255.0, blue:244.0/255.0, opacity: 100.0/255.0)
+import UIKit
 
 struct LoginView: View {
-    //@State var showsAlert = false
-    @State private var name=""
-    @State private var psw=""
-    @State var reg=false
-    @State var res=false
-    @State var dis=false
-    @State private var loginMode=0
-    //@State var loading=false
-    @State private var camDisconnectAlert=false
-    @StateObject var se:Session
-    //@State var t1=false
+    @ObservedObject var se: Session
+    @State private var name = ""
+    @State private var password = ""
+    @State private var loginMode = 0
+    @State private var registration = false
+    @State private var resetPassword = false
+    @State private var instructions = false
+    @State private var cameraAlert = false
+    @State private var passwordVisible = false
+    @FocusState private var focusedField: Field?
+    @Environment(\.dynamicTypeSize) private var typeSize
+    @ScaledMetric(relativeTo: .subheadline) private var fieldLabelWidth = 88
+
+    private enum Field: Hashable { case username, password }
+
     private var canSignIn: Bool {
-        !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-        !psw.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !password.isEmpty
     }
+
     var body: some View {
-        GeometryReader{ geometry in
-            ZStack(alignment: .center) {
-                
-                ZStack
-                {
-                    
-                    
-                    Image("ol2")
-                        .resizable()
-                    //.scaledToFit()
-                        .aspectRatio(contentMode: .fill)
-                        .edgesIgnoringSafeArea(.all)
-                        .frame(width:geometry.size.width)
-                     
-                    //Text("login")
-                    HStack{
-                        
-                    Spacer()
-                    VStack{
-                        Spacer()/*
-                        Image("usgs")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height:geometry.size.width/4.5)
-                            .foregroundColor(.gray)*/
-                        //Image(systemName: "person.crop.circle.fill")
-                        HStack{
-                            Image("mu")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height:geometry.size.width/3.5)
-                                .foregroundColor(.gray)
-                            Image("msu")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height:geometry.size.width/3.5)
-                                .foregroundColor(.gray)
-                        }
-                        Text("Oilix")
-                            .font(.largeTitle)
-                            .fontWeight(.semibold)
-                            //.padding(.top, 30)
-                        Text("Oil Analysis Tool and Information Exchange")
-                            .font(.system(size: 15))
-                            //.padding(.bottom, 10)
-                        Picker("Login type", selection: $loginMode) {
-                            Text("User").tag(0)
-                            Text("Admin").tag(1)
-                        }
-                        .pickerStyle(SegmentedPickerStyle())
-                        .frame(width: geometry.size.width*0.8)
-                        .padding(.top, 8)
-                        VStack{
-                            //Text("User Name").fontWeight(.bold)
-                            TextField("Username",text:$name)
-                                .padding()
-                                .foregroundColor(.black)
-                                .background(lGrey)
-                                .cornerRadius(10)
-                                .autocapitalization(UITextAutocapitalizationType.none)
-                                .disableAutocorrection(true)
-                                .submitLabel(.continue)
-                            //Text("Password").fontWeight(.bold)
-                            SecureField("Password",text:$psw)
-                                .padding()
-                                .foregroundColor(.black)
-                                .background(lGrey)
-                                .cornerRadius(10)
-                                .submitLabel(.done)
-                            //Button(){                            print("Hello world!")                        }
-                        }.frame(width: geometry.size.width*0.8, height: 200.0)//////////////
-                        
-                        
-                        Button {
-                            se.loading=true
-                            let camUrl=URL(string: cameraURL+"stat")!
-                            AF.request(camUrl, method: .get)//try to connect with OilixCam first
-                            {
-                                urlRequest in
-                                urlRequest.timeoutInterval=1
+        OilixNavigation {
+            ScrollViewReader { proxy in
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
+                        VStack(spacing: 12) {
+                            HStack(spacing: 24) {
+                                Image("mu").resizable().scaledToFit().frame(width: 72, height: 84)
+                                Image("msu").resizable().scaledToFit().frame(width: 72, height: 84)
                             }
-                            .response{
-                                response in
-                                switch(response.result){
-                                case .success:
-                                    camDisconnectAlert=true
-                                    break
-                                case .failure(_):
-                                    se.name=name
-                                    se.psw=psw
-                                    se.login(asAdmin: loginMode == 1)
-                                    break
-                                }
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel("University of Missouri and Missouri State University")
+                            .accessibilityIdentifier("login.logos")
+                            VStack(spacing: 4) {
+                                Text("Oilix").font(.title2.bold())
+                                    .accessibilityIdentifier("login.brandTitle")
+                                Text("Oil Analysis Tool and Information Exchange")
+                                    .font(.caption.weight(.medium))
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .accessibilityIdentifier("login.brandSubtitle")
                             }
-                            
-                            /*
-                             if !res
-                             {
-                             showsAlert=true
-                             print("showsAlert=true")
-                             }
-                             else{
-                             showsAlert=false
-                             print("showsAlert=false")
-                             }
-                            */
-                            //print("err:")
-                            //print(se.showAlert)
-                        } label: {
-                            Text(loginMode == 0 ? "Sign In" : "Admin Sign In")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .padding()
-                                .frame(width:geometry.size.width*0.6,height:60)
-                                .background(canSignIn ? Color.blue : Color.gray)
-                                .cornerRadius(35)
-                                .contentShape(Rectangle())
-                        }
-                        .alert(isPresented: ($se.showAlert)) {
-                            Alert(
-                                title: Text("Error"),
-                                //message: Text("Sign in failed")
-                                message: Text(se.msg)
-                            )
-                        }
-                        .disabled(!canSignIn)
-                        
-                        VStack
-                        {
-                            if loginMode == 0 {
-                                HStack{
-                                    Text("No account?").font(.system(size:15))
-                                /*
-                                 Link(destination: URL(string: "https://answers.usgs.gov/")!, label: {
-                                 Text("SIGN UP").font(.system(size:15))
-                                 }
-                                 
-                                 )
-                                 */
-                                    Button("Sign Up"){
-                                        reg=true
+                            .foregroundColor(.black)
+                        }.multilineTextAlignment(.center).frame(maxWidth: .infinity)
+                        LoginAccountPicker(selection: $loginMode)
+                            .frame(height: 48)
+                        VStack(spacing: 0) {
+                            credentialRow("Username") {
+                                HStack(spacing: 0) {
+                                    TextField("Required", text: $name)
+                                        .textContentType(.username)
+                                        .textInputAutocapitalization(.never).disableAutocorrection(true)
+                                        .submitLabel(.next).focused($focusedField, equals: .username)
+                                        .onSubmit { focusedField = .password }
+                                        .frame(maxWidth: .infinity, minHeight: 44)
+                                        .accessibilityLabel("Username")
+                                        .accessibilityIdentifier("login.username")
+                                    if name.isEmpty {
+                                        Color.clear.frame(width: 44, height: 44).accessibilityHidden(true)
+                                    } else {
+                                        Button { name = ""; focusedField = .username } label: {
+                                            Image(systemName: "xmark.circle.fill")
+                                                .font(.system(size: 16)).foregroundColor(.secondary)
+                                                .frame(width: 44, height: 44)
+                                        }.buttonStyle(.plain).accessibilityLabel("Clear username")
+                                            .accessibilityIdentifier("login.username.clear")
                                     }
-                                    .font(.system(size:15))
                                 }
                             }
-                            HStack{
-                                Button("Forgot Password?"){
-                                    res=true
+                            .id("login.usernameRow")
+                            Divider().padding(.horizontal, 16)
+                            credentialRow("Password") {
+                                HStack(spacing: 0) {
+                                    Group {
+                                        if passwordVisible { TextField("Required", text: $password) }
+                                        else { SecureField("Required", text: $password) }
+                                    }
+                                    .textContentType(.password)
+                                    .textInputAutocapitalization(.never).disableAutocorrection(true)
+                                    .submitLabel(.go).focused($focusedField, equals: .password)
+                                    .onSubmit { if canSignIn && !se.loading { signIn() } }
+                                    .frame(maxWidth: .infinity, minHeight: 44)
+                                    .accessibilityLabel("Password")
+                                    .accessibilityIdentifier("login.password")
+                                    Button(action: togglePasswordVisibility) {
+                                        Image(systemName: passwordVisible ? "eye.slash" : "eye")
+                                            .font(.system(size: 18)).frame(width: 44, height: 44)
+                                    }
+                                    .buttonStyle(.plain).foregroundColor(.secondary)
+                                    .accessibilityLabel(passwordVisible ? "Hide password" : "Show password")
+                                    .accessibilityIdentifier("login.password.visibility")
                                 }
-                                .font(.system(size:15))
-                                //Button("test") {se.testLogin()}///////////////////
                             }
-                            .alert(isPresented: ($camDisconnectAlert)) {
-                                Alert(
-                                    title: Text("Error"),
-                                    message: Text("Disconnect "+deviceName+" before login.")
-                                )
-                            }/*
-                            Button("Disclaimer"){
-                                dis=true
-                            }
-                            .font(.system(size:15))
-                            .alert(isPresented: ($dis)) {
-                                Alert(
-                                    title: Text("Disclaimer"),
-                                    message: Text("This software is preliminary or provisional and is subject to revision. It is being provided to meet the need for timely best science. The software has not received final approval by the U.S. Geological Survey (USGS). No warranty, expressed or implied, is made by the USGS or the U.S. Government as to the functionality of the software and related material nor shall the fact of release constitute any such warranty. The software is provided on the condition that neither the USGS nor the U.S. Government shall be held liable for any damages resulting from the authorized or unauthorized use of the software.")
-                                )
-                            }*/
-                            /*
-                             Button("test") {
-                             //showsAlert=false
-                             //print("testlogin")
-                             //se.isLoggedIn=true
-                             //t1 = !t1
-                             $se.showAlert=true
-                             }
-                             Button("test2") {
-                             //showsAlert=false
-                             print($se.showAlert)
-                             //se.isLoggedIn=true
-                             //t1 = !t1
-                             }
-                             */
-                            /*
-                             NavigationLink(destination: tab()) {
-                             Text("test2")
-                             }
-                             */
-                        }/*
-                        .alert(isPresented: ($camDisconnectAlert)) {
-                            Alert(
-                                title: Text("Error"),
-                                message: Text("Disconnect "+deviceName+" before login.")
-                            )
+                            .id("login.passwordRow")
                         }
-                        */
-                        
+                        .id("login.credentials")
+                        .textFieldStyle(.plain)
+                        .background(Color(uiColor: .secondarySystemBackground))
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(
+                            focusedField == nil ? Color(uiColor: .separator).opacity(0.3) : Color.accentColor,
+                            lineWidth: 1))
+                        Button(action: signIn) {
+                            HStack(spacing: 12) {
+                                if se.loading { ProgressView().tint(.secondary) }
+                                Text(se.loading ? "Signing In..." : loginMode == 0 ? "Sign In" : "Admin Sign In")
+                            }
+                        }
+                        .buttonStyle(PrimaryActionStyle())
+                        .background(RoundedRectangle(cornerRadius: 8)
+                            .fill(Color(uiColor: .systemBackground).opacity(0.9)))
+                        .disabled(!canSignIn || se.loading)
+                        .accessibilityIdentifier("login.signIn")
+                        if typeSize.isAccessibilitySize {
+                            VStack(spacing: 8) { accountActions }
+                        } else {
+                            HStack(spacing: 16) { accountActions }
+                        }
+                    }
+                    .padding(.horizontal, 20).padding(.vertical, 20)
+                    .frame(maxWidth: 480, alignment: .leading).frame(maxWidth: .infinity)
+                }
+                .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)) { _ in
+                    scrollToCredentials(using: proxy)
+                }
+                .onChange(of: focusedField) { _ in scrollToCredentials(using: proxy) }
+                .oilixKeyboardDismissal()
+                .background(loginBackground)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button { instructions = true } label: { Label("Instructions", systemImage: "book") }
+                            .accessibilityIdentifier("login.instructions")
+                    }
+                    ToolbarItemGroup(placement: .keyboard) {
                         Spacer()
-                        
+                        Button("Done") { focusedField = nil }.accessibilityIdentifier("login.keyboardDone")
                     }
-                    Spacer()
-                }
-                }
-                .disabled(se.loading)
-                .blur(radius: se.loading ? 2 : 0)
-                .sheet(isPresented: $reg, content: {
-                    RegView(reg:$reg)
-                })
-                .sheet(isPresented: $res, content: {
-                    ResetView(res:$res)
-                })
-                
-                if se.loading{
-                    Rectangle()
-                        .fill(Color.black).opacity(0.3)
-                        .edgesIgnoringSafeArea(.all)
-                    VStack(spacing:48){
-                        ProgressView()
-                            .scaleEffect(2.0, anchor: .center)
-                        Text("Logging in...")
-                            .font(.title)
-                            .fontWeight(.semibold)
-                    }
-                    .frame(width: geometry.size.width*0.6, height: geometry.size.width*0.5, alignment: .center)
-                    .background(Color.white)
-                    .foregroundColor(Color.primary)
-                    .cornerRadius(20)
                 }
             }
         }
-        
+        .disabled(se.loading)
+        .sheet(isPresented: $registration) { RegView(reg: $registration, onCreated: { name = $0; password = "" }) }
+        .sheet(isPresented: $resetPassword) { ResetView(res: $resetPassword, initialUsername: name) }
+        .sheet(isPresented: $instructions) { InstructionsView() }
+        .alert("Sign In Failed", isPresented: $se.showAlert) {
+            Button("OK", role: .cancel) { }
+        } message: { Text(se.msg) }
+        .alert("Connect to the Internet", isPresented: $cameraAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("Disconnect from \(deviceName) and connect to Wi-Fi or cellular data before signing in.")
+        }
+    }
+
+    private var loginBackground: some View {
+        GeometryReader { geometry in
+            Image("ol2").resizable().scaledToFill()
+                .frame(width: geometry.size.width, height: geometry.size.height)
+                .clipped()
+                .overlay(Color.white.opacity(0.5))
+        }
+        .ignoresSafeArea()
+        .accessibilityHidden(true)
+    }
+
+    private func scrollToCredentials(using proxy: ScrollViewProxy) {
+        guard let field = focusedField else { return }
+        let target = typeSize.isAccessibilitySize
+            ? (field == .username ? "login.usernameRow" : "login.passwordRow") : "login.credentials"
+        proxy.scrollTo(target, anchor: .center)
+    }
+
+    private func credentialRow<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
+        Group {
+            if typeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title).font(.subheadline.weight(.medium))
+                    content()
+                }
+            } else {
+                HStack(spacing: 12) {
+                    Text(title).font(.subheadline.weight(.medium))
+                        .frame(width: fieldLabelWidth, alignment: .leading)
+                    content()
+                }
+            }
+        }.padding(.horizontal, 16).padding(.vertical, 6)
+    }
+
+    @ViewBuilder
+    private var accountActions: some View {
+        if loginMode == 0 {
+            Button("Create Account") { registration = true }
+                .frame(maxWidth: .infinity, minHeight: 44)
+        }
+        Button("Forgot Password?") { resetPassword = true }
+            .frame(maxWidth: .infinity, minHeight: 44)
+    }
+
+    private func togglePasswordVisibility() {
+        let wasEditing = focusedField == .password
+        passwordVisible.toggle()
+        if wasEditing { DispatchQueue.main.async { focusedField = .password } }
+    }
+
+    private func signIn() {
+        guard canSignIn && !se.loading else { return }
+        focusedField = nil
+        se.loading = true
+        AF.request(cameraURL + "stat", method: .get) { $0.timeoutInterval = 1 }
+            .response { response in
+                if case .success = response.result {
+                    se.loading = false
+                    cameraAlert = true
+                } else {
+                    se.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
+                    se.psw = password
+                    se.login(asAdmin: loginMode == 1)
+                }
+            }
     }
 }
 
-struct LoginView_Previews: PreviewProvider {
-    static var previews: some View {
-        let se=Session()
-        LoginView(se:se)
+private struct LoginAccountPicker: UIViewRepresentable {
+    @Binding var selection: Int
+    @Environment(\.isEnabled) private var isEnabled
+
+    func makeUIView(context: Context) -> UISegmentedControl {
+        let control = LoginAccountSegmentedControl(items: ["User", "Admin"])
+        control.accessibilityIdentifier = "login.accountType"
+        control.accessibilityLabel = "Account type"
+        control.addTarget(context.coordinator, action: #selector(Coordinator.changed(_:)), for: .valueChanged)
+        return control
+    }
+
+    func updateUIView(_ control: UISegmentedControl, context: Context) {
+        control.selectedSegmentIndex = selection
+        control.isEnabled = isEnabled
+        control.backgroundColor = .white
+        control.selectedSegmentTintColor = UIColor(red: 0.03, green: 0.28, blue: 0.60, alpha: 1)
+        let font = UIFontMetrics(forTextStyle: .subheadline)
+            .scaledFont(for: .systemFont(ofSize: 15, weight: .semibold), maximumPointSize: 20)
+        control.setTitleTextAttributes([.foregroundColor: UIColor.black, .font: font], for: .normal)
+        control.setTitleTextAttributes([.foregroundColor: UIColor.white, .font: font], for: .selected)
+        control.layer.borderWidth = 1
+        control.layer.borderColor = UIColor.black.withAlphaComponent(0.2).cgColor
+        control.layer.cornerRadius = 8
+    }
+
+    func makeCoordinator() -> Coordinator { Coordinator(selection: $selection) }
+
+    final class Coordinator: NSObject {
+        private let selection: Binding<Int>
+        init(selection: Binding<Int>) { self.selection = selection }
+
+        @objc func changed(_ control: UISegmentedControl) {
+            selection.wrappedValue = control.selectedSegmentIndex
+        }
+    }
+}
+
+private final class LoginAccountSegmentedControl: UISegmentedControl {
+    override var intrinsicContentSize: CGSize {
+        CGSize(width: super.intrinsicContentSize.width, height: 48)
+    }
+
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
+        CGSize(width: super.sizeThatFits(size).width, height: 48)
     }
 }

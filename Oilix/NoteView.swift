@@ -1,86 +1,48 @@
-//
-//  NoteView.swift
-//  Oilix
-//
-//  Created by Guo, Congyu on 7/9/22.
-//
-
 import SwiftUI
 
 struct NoteView: View {
-    //@State var test:String="Hello world"
-    @StateObject var samples : WaterSampleViewModel
-    @Binding var i : Int
-    @FocusState private var foc : Bool
-    @State var ori=""
-    @Binding var noteSheet : Bool
-    
-    var body: some View {
-        GeometryReader{geometry in
-            HStack(alignment:.center){
-                Spacer()
-                VStack{
-                    //Spacer()
-                    HStack{
-                        Button(role:.cancel) {
-                            //print("cancel")
-                            samples.samples[i].note=ori
-                            noteSheet=false
-                        } label: {
-                            Text("Cancel")
-                            //Image(systemName: "ellipsis.circle")
-                                //.font(.system(size:25))
-                                //.foregroundColor(.blue)
-                        }
-                        .padding(.all)
-                        Spacer()
-                        Button {
-                            //print("save")
-                            //print(foc)
-                            noteSheet=false
-                        } label: {
-                            Text("Save")
-                            //Image(systemName: "plus.square.on.square")
-                                //.font(.system(size:25))
-                                //.foregroundColor(.blue)
-                        }
-                        .padding(.all)
-                    }
-                    HStack{
-                        Text("Note:")
-                            .font(.headline)
-                            .padding([.leading,.top], 20)
-                        Spacer()
-                    }
-                    TextEditor(text: $samples.samples[i].note)
-                        .focused($foc)
-                    .cornerRadius(10)
-                        //.frame(width: geometry.size.width-30, height: (geometry.size.width-100)*0.4)
-                        //.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: geometry.size.width)
-                    .padding([.leading, .trailing, .bottom],10)
-                        .onAppear {
-                            ori = samples.samples[i].note
-                            DispatchQueue.main.asyncAfter(deadline: .now()+0.5) {
-                                foc=true
-                                print("appear")
-                                print(foc)
-                            }
-                        }
-                    Spacer()
-                }
-                Spacer()
-            }
-            .background(Color(white:0.9))
-            //.background(lGrey)
-            .interactiveDismissDisabled()
-        }
-    }
-}
+    @ObservedObject var samples: WaterSampleViewModel
+    @Binding var i: Int
+    @Binding var noteSheet: Bool
+    @State private var draft = ""
+    @FocusState private var focused: Bool
 
-/*
-struct NoteView_Previews: PreviewProvider {
-    static var previews: some View {
-        NoteView()
+    var body: some View {
+        OilixNavigation {
+            Form {
+                Section(header: Text("Sample note")) {
+                    TextEditor(text: $draft)
+                        .frame(minHeight: 180)
+                        .focused($focused)
+                        .accessibilityLabel("Sample note")
+                        .accessibilityIdentifier("note.editor")
+                }
+            }
+            .oilixKeyboardDismissal()
+            .navigationTitle("Edit Note")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") { focused = false }.accessibilityIdentifier("note.keyboardDone")
+                }
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { noteSheet = false }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        guard samples.samples.indices.contains(i) else { return }
+                        samples.samples[i].note = draft
+                        noteSheet = false
+                    }
+                    .accessibilityIdentifier("note.save")
+                }
+            }
+        }
+        .onAppear {
+            if samples.samples.indices.contains(i) { draft = samples.samples[i].note }
+            focused = true
+        }
+        .interactiveDismissDisabled()
     }
 }
-*/

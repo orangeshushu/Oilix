@@ -6,48 +6,33 @@
 //
 
 import SwiftUI
-import MapKit
 
 struct PinView: View {
-    //@State var lo:CLLocationCoordinate2D
-    @State var res:String
+    let res: String
+    @ScaledMetric(relativeTo: .caption) private var markerWidth: CGFloat = 76
+    @ScaledMetric(relativeTo: .caption) private var markerHeight: CGFloat = 32
+
     var body: some View {
-        VStack{
-            ZStack{
-                
-                Image(systemName: "stop")
-                    .resizable()
-                //.scaledToFit()
-                    .frame(width: 60, height: 30)
-                    .font(.headline)
-                    .foregroundColor(.blue)
-                    .background(.white)
-                
-                if(res == ""){
-                    Text("-")
-                }
-                else{
-                    //Text(String(format: "%.1f", res))
-                    Text(res.prefix(5))
-                }
-                //Image(systemName: "stop.fill")
-            }
-            Image(systemName: "triangle.fill")
-                .resizable()
-                .scaledToFit()
-                .foregroundColor(.blue)
-                .frame(width: 15, height: 15)
-                .rotationEffect(Angle(degrees: 180))
-                .offset(y:-10)
-                .padding(.bottom, 27)
+        VStack(spacing: 0) {
+            Text(res.isEmpty ? "-" : res)
+                .font(.caption.monospacedDigit().weight(.semibold))
+                .foregroundColor(.primary)
+                .lineLimit(1).minimumScaleFactor(0.5)
+                .padding(.horizontal, 6)
+                .frame(width: min(markerWidth, 160), height: min(markerHeight, 80))
+                .background(Color(uiColor: .systemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 6))
+                .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.accentColor, lineWidth: 2))
+            Image(systemName: "triangle.fill").resizable().scaledToFit()
+                .foregroundColor(.accentColor).frame(width: 14, height: 10)
+                .rotationEffect(.degrees(180)).accessibilityHidden(true)
         }
-        //.background(.red)
+        .padding(.bottom, 8)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(res.isEmpty ? "Result not available" : "\(res) mg/L")
     }
 }
 
 struct PinView_Previews: PreviewProvider {
-    static var previews: some View {
-        //PinView(lo:CLLocationCoordinate2D(latitude:38.952,longitude:-92.329))
-        PinView(res:"114.514")
-    }
+    static var previews: some View { PinView(res: "114.514") }
 }

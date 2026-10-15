@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A94000012F00100100AA0001 /* FirstUseGuide.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94000002F00100100AA0001 /* FirstUseGuide.swift */; };
+		A93000012F00100100AA0001 /* InterfaceStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93000002F00100100AA0001 /* InterfaceStyle.swift */; };
+		A92000012F00100100AA0001 /* Compatibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92000002F00100100AA0001 /* Compatibility.swift */; };
+		A92000032F00100100AA0001 /* CompatibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92000022F00100100AA0001 /* CompatibilityTests.swift */; };
+		458F4363333991869950E8CA /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = E99377F5C117FA727B3D9E4A /* Alamofire */; };
+		6259E50A48587788D27CA95F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D71C697650A80216AF883AB6 /* Foundation.framework */; };
 		7B44613E27BBF82A00997579 /* PinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B44613D27BBF82A00997579 /* PinView.swift */; };
 		7B44614027EC7ABD00997579 /* RegView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B44613F27EC7ABD00997579 /* RegView.swift */; };
 		7B45740A277B42890057BAC4 /* UIImage+CVPixelBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B457409277B42890057BAC4 /* UIImage+CVPixelBuffer.swift */; };
@@ -21,10 +27,10 @@
 		7B60CF88274DC9840060A703 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7B60CF87274DC9840060A703 /* Alamofire */; };
 		7B63CA02292C9BF8009E02A9 /* LocationEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B63CA01292C9BF8009E02A9 /* LocationEditView.swift */; };
 		7B80026F28AD3C6800242899 /* water_predict_bgr.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 7B80026E28AD3C6800242899 /* water_predict_bgr.mlmodel */; };
-			7B80027128AE1B4E00242899 /* ResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B80027028AE1B4E00242899 /* ResetView.swift */; };
-			7B80027328AF2CA900242899 /* EntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B80027228AF2CA900242899 /* EntryView.swift */; };
-			7BAA00012DD1F00100AA0001 /* UserListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BAA00002DD1F00100AA0001 /* UserListView.swift */; };
-			7BD4063D275E5DF100476061 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD4063C275E5DF100476061 /* HomeView.swift */; };
+		7B80027128AE1B4E00242899 /* ResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B80027028AE1B4E00242899 /* ResetView.swift */; };
+		7B80027328AF2CA900242899 /* EntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B80027228AF2CA900242899 /* EntryView.swift */; };
+		7BAA00012DD1F00100AA0001 /* UserListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BAA00002DD1F00100AA0001 /* UserListView.swift */; };
+		7BD4063D275E5DF100476061 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD4063C275E5DF100476061 /* HomeView.swift */; };
 		7BD4063F275E5E1600476061 /* AlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD4063E275E5E1600476061 /* AlbumView.swift */; };
 		7BD40641275E5E2B00476061 /* SamplingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD40640275E5E2B00476061 /* SamplingView.swift */; };
 		7BD40643275E5E4300476061 /* AnalyzingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD40642275E5E4300476061 /* AnalyzingView.swift */; };
@@ -36,9 +42,37 @@
 		7BDC51D3274B028E00988AF2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7BDC51D2274B028E00988AF2 /* Assets.xcassets */; };
 		7BDC51D6274B028E00988AF2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7BDC51D5274B028E00988AF2 /* Preview Assets.xcassets */; };
 		7BDC51DF274C7FA700988AF2 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BDC51DE274C7FA700988AF2 /* Session.swift */; };
+		A91000012F00100100AA0001 /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91000002F00100100AA0001 /* InstructionsView.swift */; };
+		A91000032F00100100AA0001 /* AccountForms.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91000022F00100100AA0001 /* AccountForms.swift */; };
+		A91000052F00100100AA0001 /* UsabilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91000042F00100100AA0001 /* UsabilityTests.swift */; };
+		B8450DCD96020E435B503B99 /* InstructionsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A2005D59B2708D2D6CC2BCC /* InstructionsUITests.swift */; };
+		C3ACFB22D845E566973C06C7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D71C697650A80216AF883AB6 /* Foundation.framework */; };
+		FFF2E38504B43A62E35D0DC2 /* SamplingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4B66F4F7BA36ED2DF954B2 /* SamplingTests.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		9D3F0AE59CEB036B669A48DC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7BDC51C3274B028C00988AF2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7BDC51CA274B028C00988AF2;
+			remoteInfo = Oilix;
+		};
+		9E1E04BC5ACF849CB7306F38 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7BDC51C3274B028C00988AF2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7BDC51CA274B028C00988AF2;
+			remoteInfo = Oilix;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		A94000002F00100100AA0001 /* FirstUseGuide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstUseGuide.swift; sourceTree = "<group>"; };
+		A93000002F00100100AA0001 /* InterfaceStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceStyle.swift; sourceTree = "<group>"; };
+		A92000002F00100100AA0001 /* Compatibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Compatibility.swift; sourceTree = "<group>"; };
+		A92000022F00100100AA0001 /* CompatibilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilityTests.swift; sourceTree = "<group>"; };
+		0E2B509E3FBBDB127CAA19C5 /* OilixTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OilixTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B44613D27BBF82A00997579 /* PinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinView.swift; sourceTree = "<group>"; };
 		7B44613F27EC7ABD00997579 /* RegView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegView.swift; sourceTree = "<group>"; };
 		7B457409277B42890057BAC4 /* UIImage+CVPixelBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+CVPixelBuffer.swift"; sourceTree = "<group>"; };
@@ -51,11 +85,11 @@
 		7B47F09C2879F34F00177FF0 /* NoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteView.swift; sourceTree = "<group>"; };
 		7B60CF84274D93F70060A703 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		7B63CA01292C9BF8009E02A9 /* LocationEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationEditView.swift; sourceTree = "<group>"; };
-			7B80026E28AD3C6800242899 /* water_predict_bgr.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = water_predict_bgr.mlmodel; sourceTree = "<group>"; };
-			7B80027028AE1B4E00242899 /* ResetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetView.swift; sourceTree = "<group>"; };
-			7B80027228AF2CA900242899 /* EntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryView.swift; sourceTree = "<group>"; };
-			7BAA00002DD1F00100AA0001 /* UserListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListView.swift; sourceTree = "<group>"; };
-			7BD4063C275E5DF100476061 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		7B80026E28AD3C6800242899 /* water_predict_bgr.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = water_predict_bgr.mlmodel; sourceTree = "<group>"; };
+		7B80027028AE1B4E00242899 /* ResetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetView.swift; sourceTree = "<group>"; };
+		7B80027228AF2CA900242899 /* EntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryView.swift; sourceTree = "<group>"; };
+		7BAA00002DD1F00100AA0001 /* UserListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListView.swift; sourceTree = "<group>"; };
+		7BD4063C275E5DF100476061 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		7BD4063E275E5E1600476061 /* AlbumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumView.swift; sourceTree = "<group>"; };
 		7BD40640275E5E2B00476061 /* SamplingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamplingView.swift; sourceTree = "<group>"; };
 		7BD40642275E5E4300476061 /* AnalyzingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzingView.swift; sourceTree = "<group>"; };
@@ -69,6 +103,13 @@
 		7BDC51D2274B028E00988AF2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7BDC51D5274B028E00988AF2 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		7BDC51DE274C7FA700988AF2 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		9A2005D59B2708D2D6CC2BCC /* InstructionsUITests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InstructionsUITests.swift; sourceTree = "<group>"; };
+		A91000002F00100100AA0001 /* InstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
+		A91000022F00100100AA0001 /* AccountForms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountForms.swift; sourceTree = "<group>"; };
+		A91000042F00100100AA0001 /* UsabilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsabilityTests.swift; sourceTree = "<group>"; };
+		D71C697650A80216AF883AB6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		ED4B66F4F7BA36ED2DF954B2 /* SamplingTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SamplingTests.swift; sourceTree = "<group>"; };
+		FE6F80678E5F0DA35EBFD2E5 /* OilixUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OilixUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,14 +121,50 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D87BF2737D6DB79E1FF57379 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C3ACFB22D845E566973C06C7 /* Foundation.framework in Frameworks */,
+				458F4363333991869950E8CA /* Alamofire in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FA0C0CB608B3DDB466C88AFD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6259E50A48587788D27CA95F /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		11983CDA64D60EBE404251A7 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				D71C697650A80216AF883AB6 /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		4FB0F05D3D1A42714005D85A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				11983CDA64D60EBE404251A7 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		7BDC51C2274B028C00988AF2 = {
 			isa = PBXGroup;
 			children = (
 				7BDC51CD274B028C00988AF2 /* Oilix */,
 				7BDC51CC274B028C00988AF2 /* Products */,
+				4FB0F05D3D1A42714005D85A /* Frameworks */,
+				FC44F7B73A46F45A4BF01CED /* OilixTests */,
+				98D19A6CF4FBE2D82F2C7A9A /* OilixUITests */,
 			);
 			sourceTree = "<group>";
 		};
@@ -95,6 +172,8 @@
 			isa = PBXGroup;
 			children = (
 				7BDC51CB274B028C00988AF2 /* Oilix.app */,
+				0E2B509E3FBBDB127CAA19C5 /* OilixTests.xctest */,
+				FE6F80678E5F0DA35EBFD2E5 /* OilixUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -113,6 +192,11 @@
 				7BD4063C275E5DF100476061 /* HomeView.swift */,
 				7BD4064A275E9C0900476061 /* ImagePicker.swift */,
 				7BD4064C275EADC900476061 /* Info.plist */,
+				A91000002F00100100AA0001 /* InstructionsView.swift */,
+				A91000022F00100100AA0001 /* AccountForms.swift */,
+				A92000002F00100100AA0001 /* Compatibility.swift */,
+				A93000002F00100100AA0001 /* InterfaceStyle.swift */,
+				A94000002F00100100AA0001 /* FirstUseGuide.swift */,
 				7B63CA01292C9BF8009E02A9 /* LocationEditView.swift */,
 				7B47F0982873EDB700177FF0 /* LocationManager.swift */,
 				7B60CF84274D93F70060A703 /* LoginView.swift */,
@@ -125,10 +209,10 @@
 				7BD40640275E5E2B00476061 /* SamplingView.swift */,
 				7BDC51DE274C7FA700988AF2 /* Session.swift */,
 				7BD40644275E5E5D00476061 /* SettingView.swift */,
-					7BD40646275E5EE300476061 /* TabbarView.swift */,
-					7B457409277B42890057BAC4 /* UIImage+CVPixelBuffer.swift */,
-					7BAA00002DD1F00100AA0001 /* UserListView.swift */,
-					7B80026E28AD3C6800242899 /* water_predict_bgr.mlmodel */,
+				7BD40646275E5EE300476061 /* TabbarView.swift */,
+				7B457409277B42890057BAC4 /* UIImage+CVPixelBuffer.swift */,
+				7BAA00002DD1F00100AA0001 /* UserListView.swift */,
+				7B80026E28AD3C6800242899 /* water_predict_bgr.mlmodel */,
 				7B45740D279894270057BAC4 /* WaterImage.mlmodel */,
 				7B47F09A28791D3800177FF0 /* WaterSample.swift */,
 			);
@@ -141,6 +225,26 @@
 				7BDC51D5274B028E00988AF2 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		98D19A6CF4FBE2D82F2C7A9A /* OilixUITests */ = {
+			isa = PBXGroup;
+			children = (
+				9A2005D59B2708D2D6CC2BCC /* InstructionsUITests.swift */,
+			);
+			name = OilixUITests;
+			path = OilixUITests;
+			sourceTree = "<group>";
+		};
+		FC44F7B73A46F45A4BF01CED /* OilixTests */ = {
+			isa = PBXGroup;
+			children = (
+				ED4B66F4F7BA36ED2DF954B2 /* SamplingTests.swift */,
+				A91000042F00100100AA0001 /* UsabilityTests.swift */,
+				A92000022F00100100AA0001 /* CompatibilityTests.swift */,
+			);
+			name = OilixTests;
+			path = OilixTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -165,6 +269,45 @@
 			productName = Oilix;
 			productReference = 7BDC51CB274B028C00988AF2 /* Oilix.app */;
 			productType = "com.apple.product-type.application";
+		};
+		CBED75BF1A62AE60184F3EC2 /* OilixUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AB8330EE470027858884120B /* Build configuration list for PBXNativeTarget "OilixUITests" */;
+			buildPhases = (
+				EA3E3961A285E40A191D1CF1 /* Sources */,
+				FA0C0CB608B3DDB466C88AFD /* Frameworks */,
+				EBC79E44BD5EDB115C8426AD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BD5A5674B5B4AF1F55B90F67 /* PBXTargetDependency */,
+			);
+			name = OilixUITests;
+			productName = OilixUITests;
+			productReference = FE6F80678E5F0DA35EBFD2E5 /* OilixUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		E0BD341B889F1DB382E71E5A /* OilixTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CAD4505123E5CC0CE387BBE4 /* Build configuration list for PBXNativeTarget "OilixTests" */;
+			buildPhases = (
+				1D5B87AB159A78513FB39194 /* Sources */,
+				D87BF2737D6DB79E1FF57379 /* Frameworks */,
+				5AADF0702013A3B7EB33CA86 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8F4F3A9B028945474FE54018 /* PBXTargetDependency */,
+			);
+			name = OilixTests;
+			packageProductDependencies = (
+				E99377F5C117FA727B3D9E4A /* Alamofire */,
+			);
+			productName = OilixTests;
+			productReference = 0E2B509E3FBBDB127CAA19C5 /* OilixTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -198,11 +341,20 @@
 			projectRoot = "";
 			targets = (
 				7BDC51CA274B028C00988AF2 /* Oilix */,
+				E0BD341B889F1DB382E71E5A /* OilixTests */,
+				CBED75BF1A62AE60184F3EC2 /* OilixUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		5AADF0702013A3B7EB33CA86 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7BDC51C9274B028C00988AF2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -212,13 +364,35 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EBC79E44BD5EDB115C8426AD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		1D5B87AB159A78513FB39194 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FFF2E38504B43A62E35D0DC2 /* SamplingTests.swift in Sources */,
+				A91000052F00100100AA0001 /* UsabilityTests.swift in Sources */,
+				A92000032F00100100AA0001 /* CompatibilityTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7BDC51C7274B028C00988AF2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A91000012F00100100AA0001 /* InstructionsView.swift in Sources */,
+				A91000032F00100100AA0001 /* AccountForms.swift in Sources */,
+				A92000012F00100100AA0001 /* Compatibility.swift in Sources */,
+				A93000012F00100100AA0001 /* InterfaceStyle.swift in Sources */,
+				A94000012F00100100AA0001 /* FirstUseGuide.swift in Sources */,
 				7B45741027A7A8870057BAC4 /* History.swift in Sources */,
 				7B45740E279894270057BAC4 /* WaterImage.mlmodel in Sources */,
 				7BDC51DF274C7FA700988AF2 /* Session.swift in Sources */,
@@ -243,14 +417,55 @@
 				7BD40645275E5E5D00476061 /* SettingView.swift in Sources */,
 				7B47F09B28791D3800177FF0 /* WaterSample.swift in Sources */,
 				7B80027128AE1B4E00242899 /* ResetView.swift in Sources */,
-					7B80027328AF2CA900242899 /* EntryView.swift in Sources */,
-					7BAA00012DD1F00100AA0001 /* UserListView.swift in Sources */,
-				);
+				7B80027328AF2CA900242899 /* EntryView.swift in Sources */,
+				7BAA00012DD1F00100AA0001 /* UserListView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EA3E3961A285E40A191D1CF1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B8450DCD96020E435B503B99 /* InstructionsUITests.swift in Sources */,
+			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		8F4F3A9B028945474FE54018 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Oilix;
+			target = 7BDC51CA274B028C00988AF2 /* Oilix */;
+			targetProxy = 9E1E04BC5ACF849CB7306F38 /* PBXContainerItemProxy */;
+		};
+		BD5A5674B5B4AF1F55B90F67 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Oilix;
+			target = 7BDC51CA274B028C00988AF2 /* Oilix */;
+			targetProxy = 9D3F0AE59CEB036B669A48DC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		02DF9FDF712449AD58A62342 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mizzou.gcycaas.OilixTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Oilix.app/Oilix";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		7BDC51D7274B028E00988AF2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -374,26 +589,26 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 24;
 				DEVELOPMENT_ASSET_PATHS = "\"Oilix/Preview Content\"";
 				DEVELOPMENT_TEAM = ZA5R9X85B5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Oilix/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Turunig on location services allows the app to add geographic coordinate with your sample automaticlly.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Oilix uses your location to add GPS coordinates to samples and center the history map. You can also enter coordinates manually.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "The app can upload oil sample images from your photo library. Allow access to continue.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.4;
+				MARKETING_VERSION = 2.0.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mizzou.gcycaas.Oilix;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -410,26 +625,26 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 24;
 				DEVELOPMENT_ASSET_PATHS = "\"Oilix/Preview Content\"";
 				DEVELOPMENT_TEAM = ZA5R9X85B5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Oilix/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Turunig on location services allows the app to add geographic coordinate with your sample automaticlly.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Oilix uses your location to add GPS coordinates to samples and center the history map. You can also enter coordinates manually.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "The app can upload oil sample images from your photo library. Allow access to continue.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.4;
+				MARKETING_VERSION = 2.0.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mizzou.gcycaas.Oilix;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -438,6 +653,56 @@
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
+		};
+		AEC4A6178A5E34CDA25ECFE3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mizzou.gcycaas.OilixUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = Oilix;
+			};
+			name = Debug;
+		};
+		BB520F1518F6510939EF6F50 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mizzou.gcycaas.OilixUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = Oilix;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F36F6E21D9F929807760A6BB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mizzou.gcycaas.OilixTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Oilix.app/Oilix";
+			};
+			name = Debug;
 		};
 /* End XCBuildConfiguration section */
 
@@ -460,6 +725,24 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		AB8330EE470027858884120B /* Build configuration list for PBXNativeTarget "OilixUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BB520F1518F6510939EF6F50 /* Release */,
+				AEC4A6178A5E34CDA25ECFE3 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CAD4505123E5CC0CE387BBE4 /* Build configuration list for PBXNativeTarget "OilixTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				02DF9FDF712449AD58A62342 /* Release */,
+				F36F6E21D9F929807760A6BB /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -475,6 +758,11 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		7B60CF87274DC9840060A703 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7B60CF86274DC9840060A703 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		E99377F5C117FA727B3D9E4A /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 7B60CF86274DC9840060A703 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;

@@ -1,39 +1,38 @@
-//
-//  History.swift
-//  Oilix
-//
-//  Created by Guo, Congyu on 1/30/22.
-//
-
 import Foundation
 import SwiftUI
 import MapKit
 import Alamofire
 
-struct sampleHist: Identifiable{
-    let id = UUID()
+struct sampleHist: Identifiable {
+    var id: String { serverID.map(String.init) ?? path }
     let date: Date
-    //let latitude: Double
-    //let longitude: Double
     let locat: CLLocationCoordinate2D?
-    //let locatStr: String
     let result: String
     let notes: String
-    let disperseX:Double
-    let disperseY:Double
+    let disperseX: Double
+    let disperseY: Double
     let path: String
     let tags: String
+    var serverID: Int? = nil
+    var username: String? = nil
+
+    var displayTitle: String {
+        let note = notes.trimmingCharacters(in: .whitespacesAndNewlines)
+        return note.isEmpty ? serverID.map { "Sample #\($0)" } ?? "Sample" : note
+    }
 }
 
-struct HistoryResponseFail: Codable {
-    var status: Int
-    var msg: String
+enum HistoryScope: String, CaseIterable {
+    case all, mine
+
+    var title: String { self == .all ? "All Samples" : "My Samples" }
 }
 
+struct HistoryResponseFail: Decodable { let status: Int; let msg: String }
 
-struct HistoryResponse: Codable {
+struct HistoryResponse: Decodable {
     let status: Int
-    struct HistoryRecord: Codable{
+    struct HistoryRecord: Decodable {
         let id: Int?
         let path: String
         let gps: String
@@ -41,10 +40,10 @@ struct HistoryResponse: Codable {
         let result: String?
         let notes: String
         let tags: String?
+        let username: String?
     }
-    //let msg: [HistoryRecord]
-    let msg: Dictionary<Int,HistoryRecord>
-    struct HistoryMeta: Codable{
+    let msg: [Int: HistoryRecord]
+    struct HistoryMeta: Decodable {
         let total_page: Int
         let current_page: Int
         let attempted_username: String
@@ -52,176 +51,103 @@ struct HistoryResponse: Codable {
     let meta: HistoryMeta
 }
 
-class History:ObservableObject{
+class History: ObservableObject {
     @Published var data = [sampleHist]()
-    var j1:HistoryResponse?
-    
-    static func getLocation(locStr:String)->CLLocationCoordinate2D?{
-        let vowels:Set<Character> = [" "]
-        var ls=locStr
-        ls.removeAll(where:{vowels.contains($0)})
-        let loc=ls.components(separatedBy: ",")
-        if loc.count != 2
-        {
-            return nil
+    @Published private(set) var isLoading = false
+    @Published private(set) var errorMessage: String?
+    @Published private(set) var scope: HistoryScope
+    let canViewAllSamples: Bool
+    private let network: Alamofire.Session
+
+    init(network: Alamofire.Session = .default, isAdmin: Bool = false) {
+        self.network = network
+        canViewAllSamples = isAdmin
+        scope = isAdmin ? .all : .mine
+    }
+
+    func selectScope(_ scope: HistoryScope, completion: (() -> Void)? = nil) {
+        guard !isLoading, scope != self.scope, scope != .all || canViewAllSamples else {
+            completion?()
+            return
         }
-        guard let la:Double=Double(loc[0]) else {return nil}
-        guard let lo:Double=Double(loc[1]) else {return nil}
-        let ret = CLLocationCoordinate2D(latitude: la, longitude: lo)
-        return ret
+        self.scope = scope
+        // A failed scope change must not display records from the previous scope.
+        data = []
+        errorMessage = nil
+        getHistory(completion: completion)
     }
-    
-    func getHistory(){
-        //dummyData(amont: 20)
-        getFromServer()
+
+    static func getLocation(locStr: String) -> CLLocationCoordinate2D? {
+        let parts = locStr.split(separator: ",", omittingEmptySubsequences: false)
+        guard parts.count == 2,
+              let latitude = Double(parts[0].trimmingCharacters(in: .whitespaces)),
+              let longitude = Double(parts[1].trimmingCharacters(in: .whitespaces)) else { return nil }
+        let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        return CLLocationCoordinate2DIsValid(coordinate) ? coordinate : nil
     }
-    /*
-    func dummyData(amont:Int){
-        for i in 0..<20{
-            data.append(sampleHist(date:Date(timeIntervalSince1970: Double.random(in: 1609459200...1644936187)), locat:CLLocationCoordinate2D(latitude:Double.random(in: 32.5 ... 48.9),longitude:Double.random(in: -117.2 ... -81.4)), result:"114514" ,notes: "dummy", disperseX: Double.random(in: -0.0007...0.0007), disperseY: Double.random(in: -0.0007...0.0007), path: "https://missouri.edu/images/signatures/university/MUstacked.png", tags: "#dummy"))
-        }
-        //print("dummy data got")
-        print(data.count)
+
+    func getHistory(completion: (() -> Void)? = nil) {
+        guard !isLoading else { completion?(); return }
+        isLoading = true
+        errorMessage = nil
+        fetch(page: 1, accumulated: [], completion: completion)
     }
-    */
-    func getFromServer()//->Bool
-    {
-        print("server")
-        let url=URL(string: serverURL+"history")!
-        //let url=URL(string:"https://wateroil.itongue.cn/history")!
-        //let url=URL(string:"http://47.100.22.28/history")!
-        //var urlRequest = URLRequest(url: url)
-        
-        
-        
-        AF.request(url, method: .post, encoding: JSONEncoding.default, headers: nil)
-            .validate(statusCode: 200 ..< 299)
-            .responseJSON { AFdata in
-                do {
-                    /*
-                    struct TokenPair: Codable {
-                        var refresh: String
-                        var access: String
-                    }
-                     */
-                    
-                    
-                    
-                    
-                    //print(AFdata.data! as NSData)
-                    //print(String(decoding:AFdata.data!, as: UTF8.self))//Thread 1: Fatal error: Unexpectedly found nil while unwrapping an Optional value
-                    guard let dvj=AFdata.data else{
-                        print("Error: Cannot unwarp data")
-                        return
-                    }
-                    /*
-                    var recCount = -2
-                    dvj.forEach { by in
-                        if by==123
-                        {
-                            recCount+=1
-                        }
-                    }
-                    print("records:\(recCount)")
-                     */
-                    
-                    /*
-                    //dvj.insert(91, at: 21)
-                    dvj[21]=91
-                    //dvj[dvj.count-2]=93
-                    //var cur=22
-                    var sw=1
-                    var dn=22
-                    while dn<dvj.count {
-                        //if dvj[dn] == 93{
-                         //   break
-                        //}else
-                        if dvj[dn] == 123{
-                            sw=0
-                            dn+=1
-                        }else if dvj[dn] == 125{
-                            sw=1
-                            dn+=3
-                        }else if sw == 1{
-                            dvj.remove(at: dn)
-                        }else{
-                            dn+=1
-                        }
-                        if(dvj[dn]==125 && dvj[dn+1]==125)
-                        {
-                            dvj[dn+1]=93
-                            break
-                        }
-                    }
-                    print(String(decoding:dvj, as: UTF8.self))
-                     */
-                    
-                    guard let jsonObject = try JSONSerialization.jsonObject(with: dvj) as? [String: Any] else {//Thread 1: Fatal error: Unexpectedly found nil while unwrapping an Optional value
-                        print("Error: Cannot convert data to JSON object")
-                        return
-                    }
-                    //print(jsonObject["msg"])
-                    //let sms=jsonObject["msg"]!
-                    //print(sms)
-                    //jsonObject.count
-                    guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted) else {
-                        print("Error: Cannot convert JSON object to Pretty JSON data")
-                        return
-                    }
-                    print(prettyJsonData as NSData)
-                    print(String(decoding:prettyJsonData, as: UTF8.self))
-                    self.j1 =  try JSONDecoder().decode(HistoryResponse.self, from: prettyJsonData)
-                    print(self.j1!.msg.count)
-                } catch {
-                    print("Error: Trying to convert JSON data to string-h")
-                    //showsAlert=true
-                    //self.showAlert=true
+
+    func getFromServer(completion: (() -> Void)? = nil) { getHistory(completion: completion) }
+
+    private func fetch(page: Int, accumulated: [HistoryResponse.HistoryRecord], completion: (() -> Void)?) {
+        // Publish a complete snapshot so search and same-day ordering cover every server page.
+        var parameters = ["page": String(page)]
+        if scope == .all { parameters.merge(["mindate": "-", "maxdate": "-"]) { _, new in new } }
+        let endpoint = scope == .all ? "adminphotolist" : "history"
+        network.request(serverURL + endpoint, method: .post, parameters: parameters,
+                        encoder: URLEncodedFormParameterEncoder(destination: .httpBody)) { $0.timeoutInterval = 20 }
+            .validate(statusCode: 200..<300)
+            .responseData { response in
+                guard case .success(let data) = response.result else {
+                    let message = self.data.isEmpty
+                        ? "History could not be loaded. Check your connection and try again."
+                        : "History could not be refreshed. Previously loaded records are still available."
+                    self.finish(error: message, completion: completion)
                     return
                 }
-                //showsAlert=false
-                //print("logged")
-                //self.isLoggedIn=true
-                //self.showAlert=false
-                //let defaults = UserDefaults()
-                //defaults.set(self.name,forKey: "username")
-                //defaults.set(self.psw,forKey: "password")
-                //defaults.set(self.access,forKey: "access")
-                //self.err=false
-                let dateform=DateFormatter()
-                dateform.dateFormat="yyyy-MM-dd"
-                var historyItems = [sampleHist]()
-                for hm in self.j1!.msg {
-                    /*
-                    print(hm.date)
-                    self.data.append(sampleHist(
-                        date: dateform.date(from: hm.date)!,
-                        //locat: CLLocationCoordinate2D(latitude:Double.random(in: 32.5 ... 48.9),longitude:Double.random(in: -117.2 ... -81.4)),
-                        locat: History.getLocation(locStr: hm.gps),
-                        //locatStr: hm.gps,
-                        result: hm.result ?? "",
-                        notes: hm.notes,
-                        disperseX: Double.random(in: -0.0007...0.0007),
-                        disperseY: Double.random(in: -0.0007...0.0007),
-                        path: hm.path,
-                        tags: hm.tags ?? ""))
-                     */
-                    
-                    print(hm.value.date)
-                    historyItems.append(sampleHist(
-                        date: dateform.date(from: hm.value.date)!,
-                        //locat: CLLocationCoordinate2D(latitude:Double.random(in: 32.5 ... 48.9),longitude:Double.random(in: -117.2 ... -81.4)),
-                        locat: History.getLocation(locStr: hm.value.gps),
-                        //locatStr: hm.gps,
-                        result: hm.value.result ?? "",
-                        notes: hm.value.notes,
-                        disperseX: Double.random(in: -0.0007...0.0007),
-                        disperseY: Double.random(in: -0.0007...0.0007),
-                        path: hm.value.path,
-                        tags: hm.value.tags ?? ""))
-
+                let decoder = JSONDecoder()
+                if let failure = try? decoder.decode(HistoryResponseFail.self, from: data), failure.status != 0 {
+                    self.finish(error: failure.msg, completion: completion); return
                 }
-                self.data = historyItems.sorted { $0.date > $1.date }
+                guard let decoded = try? decoder.decode(HistoryResponse.self, from: data), decoded.status == 0,
+                      decoded.meta.current_page == page, (1...10000).contains(decoded.meta.total_page) else {
+                    self.finish(error: "History could not be read. Please try again.", completion: completion); return
+                }
+                let records = accumulated + Array(decoded.msg.values)
+                if page < decoded.meta.total_page && !decoded.msg.isEmpty {
+                    self.fetch(page: page + 1, accumulated: records, completion: completion)
+                    return
+                }
+                let formatter = DateFormatter()
+                formatter.locale = Locale(identifier: "en_US_POSIX")
+                formatter.dateFormat = "yyyy-MM-dd"
+                var seen = Set<String>()
+                self.data = records.sorted {
+                    $0.date == $1.date ? ($0.id ?? 0) > ($1.id ?? 0) : $0.date > $1.date
+                }.compactMap { record in
+                    let key = record.id.map(String.init) ?? record.path
+                    guard seen.insert(key).inserted, let date = formatter.date(from: record.date) else { return nil }
+                    let seed = abs((record.id ?? record.path.hashValue) % 1000)
+                    return sampleHist(date: date, locat: Self.getLocation(locStr: record.gps),
+                                      result: record.result ?? "", notes: record.notes,
+                                      disperseX: Double(seed % 17 - 8) * 0.00008,
+                                      disperseY: Double(seed % 19 - 9) * 0.00008,
+                                      path: record.path, tags: record.tags ?? "", serverID: record.id,
+                                      username: record.username)
+                }
+                self.finish(error: nil, completion: completion)
             }
     }
-     
+
+    private func finish(error: String?, completion: (() -> Void)?) {
+        errorMessage = error
+        isLoading = false
+        completion?()
+    }
 }

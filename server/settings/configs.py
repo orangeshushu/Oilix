@@ -3,9 +3,9 @@
 """
 
 import os
-import sys
 import urllib.parse
-ROOT_DIR = os.path.split(os.path.realpath(sys.argv[0]))[0]
+# Service wrappers may live outside the application directory.
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 settings = {
     'template_path': os.path.join(ROOT_DIR, "templates"),

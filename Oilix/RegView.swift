@@ -1,112 +1,120 @@
-//
-//  RegView.swift
-//  Oilix
-//
-//  Created by Guo, Congyu on 3/24/22.
-//
-
 import SwiftUI
 import Alamofire
 
 struct RegView: View {
-    @State var username:String=""
-    @State var password:String=""
-    @State var name:String=""
-    @State var email:String=""
-    @State var showAlert:Bool=false
-    @State var alertMsg="Unexpected error"
-    @Binding var reg : Bool
+    @Binding var reg: Bool
+    var onCreated: (String) -> Void = { _ in }
+    @State private var username = ""
+    @State private var password = ""
+    @State private var confirmation = ""
+    @State private var name = ""
+    @State private var email = ""
+    @State private var submitting = false
+    @State private var error: String?
+    @State private var success = false
+    @State private var discard = false
+
+    private var valid: Bool {
+        AccountValidation.usernameIsValid(username) && AccountValidation.newPasswordIsValid(password)
+            && password == confirmation && AccountValidation.emailIsValid(email, optional: true)
+            && AccountValidation.nameIsValid(name)
+    }
+
+    private var hasDraft: Bool {
+        !username.isEmpty || !password.isEmpty || !confirmation.isEmpty || !name.isEmpty || !email.isEmpty
+    }
+
     var body: some View {
-        VStack{
-            NavigationView{
-                Form{
-                    Section(header:Text("Login info")){
-                        TextField("Username", text:$username)
-                            .autocapitalization(UITextAutocapitalizationType.none)
-                            .disableAutocorrection(true)
-                        SecureField("Password", text:$password)
-                            //.autocapitalization(UITextAutocapitalizationType.none)
+        OilixNavigation {
+            Form {
+                Section(header: Text("Account")) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Username").font(.subheadline)
+                        TextField("Username", text: $username).textContentType(.username)
+                            .textInputAutocapitalization(.never).disableAutocorrection(true)
+                            .accessibilityIdentifier("register.username")
                     }
-                    Section(header:Text("Personal info")){
-                        TextField("Your name(Optional)", text:$name)
-                            .disableAutocorrection(true)
-                        TextField("E-mail(Optional)", text:$email)
-                            .autocapitalization(UITextAutocapitalizationType.none)
-                            .disableAutocorrection(true)
+                    PasswordInput(title: "Password", text: $password, newPassword: true, identifier: "register.password")
+                    PasswordInput(title: "Confirm Password", text: $confirmation, newPassword: true, identifier: "register.confirmation")
+                    if !password.isEmpty && !AccountValidation.newPasswordIsValid(password) {
+                        FormMessage(text: "Use 8 to 255 characters for your password.")
                     }
-                    Section(){
-                        Button(action:{
-                            //let url=URL(string:"https://wateroil.itongue.cn/register")!
-                            let url=URL(string: serverURL+"register")!
-                            //let url=URL(string:"http://47.100.22.28/register")!
-                            let parameters=["username":username,"password":password,"email":email,"name":name]
-                            struct RegResponse: Codable {
-                                var status: Int
-                                var msg: String
-                            }
-                            var j1:RegResponse=RegResponse(status: 9, msg: "")
-                            
-                            AF.request(url, method: .post, parameters: parameters, encoder: URLEncodedFormParameterEncoder(destination: .httpBody), headers: nil)
-                                .validate(statusCode: 200 ..< 299)
-                                .responseJSON { AFdata in
-                                    do {
-                                        
-                                        if(AFdata.data==nil){
-                                            print("AFdata.data is nil")
-                                            return
-                                        }
-                                        
-                                        print(String(decoding:AFdata.data!, as: UTF8.self))
-                                        guard let jsonObject = try JSONSerialization.jsonObject(with: AFdata.data!) as? [String: Any] else {//Thread 1: Fatal error: Unexpectedly found nil while unwrapping an Optional value
-                                            print("Error: Cannot convert data to JSON object")
-                                            return
-                                        }
-                                        guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted) else {
-                                            print("Error: Cannot convert JSON object to Pretty JSON data")
-                                            return
-                                        }
-                                        j1 =  try JSONDecoder().decode(RegResponse.self, from: prettyJsonData)
-                                        print(j1.msg)
-                                    } catch {
-                                        print("Error: Trying to convert JSON data to string")
-                                        //showsAlert=true
-                                        self.showAlert=true
-                                        return
-                                    }
-                                    //showsAlert=false
-                                    //print("logged")
-                                    alertMsg=j1.msg
-                                    self.showAlert=true
-                                    //let defaults = UserDefaults()
-                                    //self.err=false
-                                }
-                            
-                            
-                            
-                        },
-                               label:{Text("Sign up").foregroundColor(.blue)}
-                        )
-                            .alert(isPresented: ($showAlert)) {
-                                Alert(
-                                    title: Text("Sign up"),
-                                    message: Text(alertMsg)
-                                )
-                            }
-                        Button(action:{
-                            reg=false
-                        },
-                               label:{Text("Back").foregroundColor(.red)}
-                        )
+                    if !confirmation.isEmpty && confirmation != password {
+                        FormMessage(text: "Passwords do not match.")
                     }
-                }.navigationTitle("New account")
+                }
+                Section(header: Text("Profile")) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Name (optional)").font(.subheadline)
+                        TextField("Name", text: $name).textContentType(.name)
+                            .accessibilityIdentifier("register.name")
+                        if !AccountValidation.nameIsValid(name) { FormMessage(text: "Use up to 50 characters for your name.") }
+                    }
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Email (optional)").font(.subheadline)
+                        TextField("Email", text: $email).textContentType(.emailAddress).keyboardType(.emailAddress)
+                            .textInputAutocapitalization(.never).disableAutocorrection(true)
+                            .accessibilityIdentifier("register.email")
+                    }
+                    if !AccountValidation.emailIsValid(email, optional: true) {
+                        FormMessage(text: "Enter a valid email address.")
+                    }
+                }
+                Section {
+                    if let error = error { FormMessage(text: error) }
+                    Button(action: createAccount) {
+                        HStack {
+                            if submitting { ProgressView() }
+                            Text(submitting ? "Creating Account..." : "Create Account").font(.headline)
+                        }.frame(maxWidth: .infinity, minHeight: 44)
+                    }
+                    .disabled(!valid || submitting)
+                    .accessibilityIdentifier("register.submit")
+                }
+            }
+            .disabled(submitting)
+            .oilixKeyboardDismissal()
+            .navigationTitle("Create Account").navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") { UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) }
+                        .accessibilityIdentifier("register.keyboardDone")
+                }
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { if hasDraft { discard = true } else { reg = false } }
+                        .disabled(submitting)
+                }
             }
         }
+        .interactiveDismissDisabled(hasDraft || submitting)
+        .alert("Discard this account form?", isPresented: $discard) {
+            Button("Discard", role: .destructive) { reg = false }
+            Button("Keep Editing", role: .cancel) { }
+        }
+        .alert("Account Created", isPresented: $success) {
+            Button("Sign In") { onCreated(username.trimmingCharacters(in: .whitespacesAndNewlines)); reg = false }
+        } message: { Text("Your account is ready. Sign in to start sampling.") }
+    }
+
+    private func createAccount() {
+        guard valid && !submitting else { return }
+        submitting = true
+        error = nil
+        let parameters = ["username": username.trimmingCharacters(in: .whitespacesAndNewlines),
+                          "password": password, "name": name.trimmingCharacters(in: .whitespacesAndNewlines),
+                          "email": email.trimmingCharacters(in: .whitespacesAndNewlines)]
+        AF.request(serverURL + "register", method: .post, parameters: parameters,
+                   encoder: URLEncodedFormParameterEncoder(destination: .httpBody)) { $0.timeoutInterval = 20 }
+            .validate(statusCode: 200..<300)
+            .responseDecodable(of: AccountActionResponse.self) { response in
+                submitting = false
+                switch response.result {
+                case .success(let result):
+                    if result.status == 0 { success = true } else { error = result.msg }
+                case .failure:
+                    error = "Account creation could not be confirmed. Try signing in before creating it again."
+                }
+            }
     }
 }
-/*
-struct RegView_Previews: PreviewProvider {
-    static var previews: some View {
-        RegView()
-    }
-}
-*/

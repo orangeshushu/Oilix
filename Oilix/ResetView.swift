@@ -1,110 +1,109 @@
-//
-//  ResetView.swift
-//  Oilix
-//
-//  Created by Guo, Congyu on 8/18/22.
-//
-
 import SwiftUI
 import Alamofire
 
 struct ResetView: View {
-    @State var username:String=""
-    @State var password:String=""
-    @State var password2:String=""
-    @State var email:String=""
-    @State var showAlert:Bool=false
-    @State var alertMsg="Unexpected error"
-    @Binding var res : Bool
+    @Binding var res: Bool
+    var initialUsername = ""
+    @State private var username = ""
+    @State private var password = ""
+    @State private var confirmation = ""
+    @State private var email = ""
+    @State private var submitting = false
+    @State private var error: String?
+    @State private var success = false
+    @State private var discard = false
+    @State private var initialized = false
+
+    private var valid: Bool {
+        AccountValidation.usernameIsValid(username) && AccountValidation.emailIsValid(email)
+            && AccountValidation.newPasswordIsValid(password) && password == confirmation
+    }
+
     var body: some View {
-        VStack{
-            NavigationView{
-                Form{
-                    Section(header:Text("Account info")){
-                        TextField("Username", text:$username)
-                            .autocapitalization(UITextAutocapitalizationType.none)
-                            .disableAutocorrection(true)
-                        TextField("E-mail(associated with account)", text:$email)
-                            .autocapitalization(UITextAutocapitalizationType.none)
-                            .disableAutocorrection(true)
+        OilixNavigation {
+            Form {
+                Section(header: Text("Account")) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Username").font(.subheadline)
+                        TextField("Username", text: $username).textContentType(.username)
+                            .textInputAutocapitalization(.never).disableAutocorrection(true)
+                            .accessibilityIdentifier("reset.username")
                     }
-                    Section(header:Text("New password")){
-                        SecureField("Choose password", text:$password)
-                        SecureField("Re-enter new password", text:$password2)
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Account Email").font(.subheadline)
+                        TextField("Email", text: $email).textContentType(.emailAddress).keyboardType(.emailAddress)
+                            .textInputAutocapitalization(.never).disableAutocorrection(true)
+                            .accessibilityIdentifier("reset.email")
                     }
-                    Section(){
-                        Button(action:{
-                            if(password==password2){
-                                let url=URL(string: serverURL+"resetpassword")!
-                                let parameters=["username":username,"password":password,"email":email]
-                                struct ResetResponse: Codable {
-                                    var status: Int
-                                    var msg: String
-                                    struct ResetMeta: Codable{
-                                        var attempted_username: String
-                                    }
-                                    var meta: ResetMeta
-                                }
-                                var j1:ResetResponse?
-                                
-                                AF.request(url, method: .post, parameters: parameters, encoder: URLEncodedFormParameterEncoder(destination: .httpBody), headers: nil)
-                                    .validate(statusCode: 200 ..< 299)
-                                    .responseJSON { AFdata in
-                                        do {
-                                            
-                                            if(AFdata.data==nil){
-                                                print("AFdata.data is nil")
-                                                return
-                                            }
-                                            
-                                            print(String(decoding:AFdata.data!, as: UTF8.self))
-                                            guard let jsonObject = try JSONSerialization.jsonObject(with: AFdata.data!) as? [String: Any] else {//Thread 1: Fatal error: Unexpectedly found nil while unwrapping an Optional value
-                                                print("Error: Cannot convert data to JSON object")
-                                                return
-                                            }
-                                            guard let prettyJsonData = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted) else {
-                                                print("Error: Cannot convert JSON object to Pretty JSON data")
-                                                return
-                                            }
-                                            j1 =  try JSONDecoder().decode(ResetResponse.self, from: prettyJsonData)
-                                            print(j1!.msg)////////////
-                                        } catch {
-                                            print("Error: Trying to convert JSON data to string")
-                                            alertMsg="JSON decode error."
-                                            self.showAlert=true
-                                            return
-                                        }
-                                        alertMsg=j1!.msg
-                                        self.showAlert=true
-                                    }
-                            }else{
-                                alertMsg="Password and re-entered password must match."
-                                self.showAlert=true
-                            }
-                        },
-                               label:{Text("Reset").foregroundColor(.blue)}
-                        )
-                        .alert(isPresented: ($showAlert)) {
-                            Alert(
-                                title: Text("Password reset"),
-                                message: Text(alertMsg)
-                            )
-                        }
-                        Button(action:{
-                            res=false
-                        },
-                               label:{Text("Back").foregroundColor(.red)}
-                        )
+                    if !email.isEmpty && !AccountValidation.emailIsValid(email) {
+                        FormMessage(text: "Enter a valid email address.")
                     }
-                }.navigationTitle("Reset password")
+                }
+                Section(header: Text("New Password")) {
+                    PasswordInput(title: "New Password", text: $password, newPassword: true, identifier: "reset.password")
+                    PasswordInput(title: "Confirm Password", text: $confirmation, newPassword: true, identifier: "reset.confirmation")
+                    if !password.isEmpty && !AccountValidation.newPasswordIsValid(password) {
+                        FormMessage(text: "Use 8 to 255 characters for your password.")
+                    }
+                    if !confirmation.isEmpty && confirmation != password { FormMessage(text: "Passwords do not match.") }
+                }
+                Section {
+                    if let error = error { FormMessage(text: error) }
+                    Button(action: resetPassword) {
+                        HStack {
+                            if submitting { ProgressView() }
+                            Text(submitting ? "Resetting Password..." : "Reset Password").font(.headline)
+                        }.frame(maxWidth: .infinity, minHeight: 44)
+                    }
+                    .disabled(!valid || submitting)
+                    .accessibilityIdentifier("reset.submit")
+                }
+            }
+            .disabled(submitting)
+            .oilixKeyboardDismissal()
+            .navigationTitle("Reset Password").navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") { UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) }
+                        .accessibilityIdentifier("reset.keyboardDone")
+                }
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        if !password.isEmpty || !confirmation.isEmpty || !email.isEmpty { discard = true }
+                        else { res = false }
+                    }.disabled(submitting)
+                }
             }
         }
+        .onAppear { if !initialized { username = initialUsername; initialized = true } }
+        .interactiveDismissDisabled(submitting || !password.isEmpty || !confirmation.isEmpty || !email.isEmpty)
+        .alert("Discard password changes?", isPresented: $discard) {
+            Button("Discard", role: .destructive) { res = false }
+            Button("Keep Editing", role: .cancel) { }
+        }
+        .alert("Password Updated", isPresented: $success) {
+            Button("Sign In") { res = false }
+        } message: { Text("Sign in with your new password.") }
+    }
+
+    private func resetPassword() {
+        guard valid && !submitting else { return }
+        error = nil
+        submitting = true
+        AF.request(serverURL + "resetpassword", method: .post,
+                   parameters: ["username": username.trimmingCharacters(in: .whitespacesAndNewlines),
+                                "email": email.trimmingCharacters(in: .whitespacesAndNewlines), "password": password],
+                   encoder: URLEncodedFormParameterEncoder(destination: .httpBody)) { $0.timeoutInterval = 20 }
+            .validate(statusCode: 200..<300)
+            .responseDecodable(of: AccountActionResponse.self) { response in
+                submitting = false
+                switch response.result {
+                case .success(let result):
+                    if result.status == 0 { success = true } else { error = result.msg }
+                case .failure:
+                    error = "Password reset could not be confirmed. Try signing in with the new password before retrying."
+                }
+            }
     }
 }
-/*
-struct ResetView_Previews: PreviewProvider {
-    static var previews: some View {
-        ResetView()
-    }
-}
-*/
