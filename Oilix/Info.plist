@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
     <key>NSLocalNetworkUsageDescription</key>
-    <string>Oilix connects to Oilix Cam over Wi-Fi to check the camera and capture sample images.</string>
+    <string>Oilix uses your local network to connect to Oilix Cam and test ESP32 devices over Wi-Fi.</string>
     <key>NSAppTransportSecurity</key>
     <dict>
         <key>NSAllowsLocalNetworking</key>

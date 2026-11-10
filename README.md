@@ -31,13 +31,13 @@ server/utils/                Backend utility code
 
 ## iOS App
 
-- Source version: `2.0.6`
-- Build: `24`
+- Source version: `2.0.7`
+- Build: `25`
 - Bundle ID: `com.mizzou.gcycaas.Oilix`
 - Minimum iOS version: `15.0`
 - Backend URL used by the app: `https://wateroil.covlab.tech/`
 
-Version 2.0.6 contains the redesigned app, Jeff's step-by-step instructions, and the first-use app tour introduced in 2.0.5. The 2.0.6 release refreshes the App Store screenshots and retains the same app functionality. See [release notes](ReleaseNotes/2.0.6.md) for the dated submission record and verification results, and [store screenshots](AppStoreAssets/Screenshots/2.0.6/README.md) for the submitted images and capture steps.
+Version 2.0.7 keeps the sign-in controls light in Dark Mode and adds a manual ESP32 connection test in Sampling. See the [2.0.7 release notes](ReleaseNotes/2.0.7.md) for the full changelog and verification status. The store listing reuses the [2.0.6 screenshots](AppStoreAssets/Screenshots/2.0.6/README.md).
 
 Reproduce locally:
 
@@ -62,7 +62,7 @@ Notes:
 
 - The app backend URL is defined in `Oilix/OilixApp.swift` as `https://wateroil.covlab.tech/`.
 - Xcode resolves the pinned Alamofire 5.4.4 dependency. The two bundled Core ML model files and the shared Oilix scheme are included.
-- A physical-device build may require a valid Apple Developer Team and signing setup.
+- A physical-device build requires a valid Apple Developer Team and signing setup. Use the Release configuration for the same manual Wi-Fi workflow as the App Store build. Debug enables Hotspot Configuration by default and requires a provisioning profile that supports it.
 - The Oilix camera workflow expects the camera access point/device constants defined in `Oilix/OilixApp.swift`.
 
 ### App Workflow
@@ -84,6 +84,31 @@ Settings groups personal details and Edit Profile under Personal Profile, map/de
 Instructions are also available before sign-in, from the Sampling menu, from History, and in Settings. These secondary entries open a dismissible sheet with a Done action. The web database opens at `https://wateroil.web.app`.
 
 The Sampling start screen opens the preparation guide directly with standard back navigation. The Instructions tab and relevant guide details link directly to Sampling and upload History without clearing the current image selection. These authenticated shortcuts are not shown in the pre-sign-in guide. The analysis steps name the current image-source controls; the preparation quantities and times retain the supplied procedure.
+
+### ESP32 Connection Test
+
+Use a physical iPhone and a powered ESP32 with its Wi-Fi access point and HTTP server running. Get the network name, password (if required), and private IPv4 address from the device owner.
+
+1. Sign in to Oilix while the iPhone has internet access.
+2. In iPhone **Settings > Wi-Fi**, join the ESP32 network. The reference network is `Oilix`; use the device's actual network name and password. The device network may not provide internet access.
+3. Return to Oilix, open **Sampling**, and tap the **Wi-Fi** icon in the top toolbar.
+4. In **Device Address**, confirm or edit `192.168.1.87`. The default port is HTTP 80; include the port if your device uses another one (for example, `192.168.1.87:8080`). The Network Name and Password fields do not join or select a network when using the manual test.
+5. Tap **Test on Current Wi-Fi** and allow **Local Network** access if iOS prompts. Read the result under **Connection Status**.
+6. After testing, reconnect to a network with internet access before uploading samples.
+
+- **HTTP response: 200** (or another 2xx code): the server at that address answered the request successfully. A non-2xx response such as **404** also shows that an HTTP server answered, but the root request did not succeed. Neither result verifies device identity.
+- **No HTTP response**: check that the iPhone is still on the ESP32 Wi-Fi, the device HTTP server is running, the address and port match the firmware, and Oilix is allowed under **Settings > Privacy & Security > Local Network**. Try again after correcting the issue.
+
+The test sends an HTTP GET to the root path (`/`) on the current network. It does not search for Wi-Fi networks, trigger a capture, browse device storage, or import photos. The existing Oilix Cam workflow is separate. An appropriately signed Debug build can also offer **Join Wi-Fi and Test**.
+
+If a development provisioning profile does not yet include Hotspot Configuration, use a manual Wi-Fi test build. Connect the iPhone to the device in Settings, then run **Test on Current Wi-Fi**:
+
+```sh
+xcodebuild -project Oilix.xcodeproj -scheme Oilix -configuration Debug \
+  -destination 'generic/platform=iOS' -derivedDataPath /tmp/OilixESP32ManualCleanBuild \
+  CODE_SIGN_ENTITLEMENTS=Oilix/ManualWiFi.entitlements \
+  SWIFT_ACTIVE_COMPILATION_CONDITIONS='DEBUG OILIX_MANUAL_WIFI' build
+```
 
 ### Tests
 
@@ -124,7 +149,7 @@ The interface uses native navigation, tabs, and grouped account forms. Login ret
 - The deployment target remains iOS 15.0. iOS 16 and later use `NavigationStack` and interactive scroll-to-dismiss keyboards; iOS 15 retains the compatible navigation and explicit Done controls.
 - iPhone portrait and both landscape orientations are supported. On short-height screens or with accessibility text sizes, upload actions scroll with the sample instead of covering the preview.
 - Oilix Cam uses an adaptive, scrollable capture screen with a persistent shutter area at standard text sizes. Accessibility text sizes keep the shutter in the scrollable content. Requests have timeouts, duplicate captures are blocked, and leaving the screen or entering the background cancels pending camera requests.
-- The app declares Local Network access for Oilix Cam and enables only the local-network ATS exception. It does not disable transport security globally; the cloud backend continues to use HTTPS.
+- The app declares Local Network access for Oilix Cam and ESP32 connection testing, and enables only the local-network ATS exception. It does not disable transport security globally; the cloud backend continues to use HTTPS.
 - Location is requested when needed. Denied or restricted access does not repeatedly prompt; users can enter coordinates manually. Invalid readings or readings older than two minutes are not used as current GPS data, and hidden location screens stop requesting updates.
 - Map markers use semantic system colors and adaptive sizing, with full result values available to accessibility rather than a five-character prefix.
 

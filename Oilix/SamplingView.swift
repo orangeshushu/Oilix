@@ -132,6 +132,7 @@ struct SamplingView: View {
     @State private var previewN = 0
     @State private var picker = false
     @State private var capture = false
+    @State private var esp32Connection = false
     @State private var noteSheet = false
     @State private var locationSheet = false
     @State private var instructions = false
@@ -203,6 +204,14 @@ struct SamplingView: View {
                     .accessibilityIdentifier("sampling.menu")
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
+                    Button { esp32Connection = true } label: {
+                        Image(systemName: "wifi").frame(minWidth: 44, minHeight: 44)
+                    }
+                    .disabled(upload.isBusy || samples.isImporting)
+                    .accessibilityLabel("ESP32 Connection")
+                    .accessibilityIdentifier("sampling.esp32Connection")
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
                         Button { picker = true } label: { Label("Photo Library", systemImage: "photo.on.rectangle") }
                         Button { filePicker = true } label: { Label("Files", systemImage: "folder") }
@@ -227,6 +236,7 @@ struct SamplingView: View {
             })
         }
         .sheet(isPresented: $capture) { CameraView(samples: samples, picker: $picker, isPresented: $capture) }
+        .sheet(isPresented: $esp32Connection) { ESP32ConnectionView() }
         .sheet(isPresented: $noteSheet) { NoteView(samples: samples, i: $previewN, noteSheet: $noteSheet) }
         .sheet(isPresented: $locationSheet) {
             LocationEditView(ent: $locationSheet, samples: samples, ind: $previewN, region: $region)

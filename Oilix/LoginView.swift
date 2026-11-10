@@ -142,6 +142,7 @@ struct LoginView: View {
                 }
             }
         }
+        .environment(\.colorScheme, .light)
         .disabled(se.loading)
         .sheet(isPresented: $registration) { RegView(reg: $registration, onCreated: { name = $0; password = "" }) }
         .sheet(isPresented: $resetPassword) { ResetView(res: $resetPassword, initialUsername: name) }

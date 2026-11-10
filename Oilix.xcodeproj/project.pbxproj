@@ -33,6 +33,7 @@
 		7BD4063D275E5DF100476061 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD4063C275E5DF100476061 /* HomeView.swift */; };
 		7BD4063F275E5E1600476061 /* AlbumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD4063E275E5E1600476061 /* AlbumView.swift */; };
 		7BD40641275E5E2B00476061 /* SamplingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD40640275E5E2B00476061 /* SamplingView.swift */; };
+		EA3200002F00100100AA0001 /* ESP32ConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA3200002F00100100AA0002 /* ESP32ConnectionView.swift */; };
 		7BD40643275E5E4300476061 /* AnalyzingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD40642275E5E4300476061 /* AnalyzingView.swift */; };
 		7BD40645275E5E5D00476061 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD40644275E5E5D00476061 /* SettingView.swift */; };
 		7BD40647275E5EE300476061 /* TabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BD40646275E5EE300476061 /* TabbarView.swift */; };
@@ -92,6 +93,9 @@
 		7BD4063C275E5DF100476061 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		7BD4063E275E5E1600476061 /* AlbumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumView.swift; sourceTree = "<group>"; };
 		7BD40640275E5E2B00476061 /* SamplingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamplingView.swift; sourceTree = "<group>"; };
+		EA3200002F00100100AA0002 /* ESP32ConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESP32ConnectionView.swift; sourceTree = "<group>"; };
+		EA3200002F00100100AA0003 /* Oilix.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Oilix.entitlements; sourceTree = "<group>"; };
+		EA3200002F00100100AA0004 /* ManualWiFi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ManualWiFi.entitlements; sourceTree = "<group>"; };
 		7BD40642275E5E4300476061 /* AnalyzingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyzingView.swift; sourceTree = "<group>"; };
 		7BD40644275E5E5D00476061 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		7BD40646275E5EE300476061 /* TabbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarView.swift; sourceTree = "<group>"; };
@@ -207,6 +211,9 @@
 				7B44613F27EC7ABD00997579 /* RegView.swift */,
 				7B80027028AE1B4E00242899 /* ResetView.swift */,
 				7BD40640275E5E2B00476061 /* SamplingView.swift */,
+				EA3200002F00100100AA0002 /* ESP32ConnectionView.swift */,
+				EA3200002F00100100AA0003 /* Oilix.entitlements */,
+				EA3200002F00100100AA0004 /* ManualWiFi.entitlements */,
 				7BDC51DE274C7FA700988AF2 /* Session.swift */,
 				7BD40644275E5E5D00476061 /* SettingView.swift */,
 				7BD40646275E5EE300476061 /* TabbarView.swift */,
@@ -414,6 +421,7 @@
 				7B45740A277B42890057BAC4 /* UIImage+CVPixelBuffer.swift in Sources */,
 				7B63CA02292C9BF8009E02A9 /* LocationEditView.swift in Sources */,
 				7BD40641275E5E2B00476061 /* SamplingView.swift in Sources */,
+				EA3200002F00100100AA0001 /* ESP32ConnectionView.swift in Sources */,
 				7BD40645275E5E5D00476061 /* SettingView.swift in Sources */,
 				7B47F09B28791D3800177FF0 /* WaterSample.swift in Sources */,
 				7B80027128AE1B4E00242899 /* ResetView.swift in Sources */,
@@ -587,9 +595,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Oilix/Oilix.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_ASSET_PATHS = "\"Oilix/Preview Content\"";
 				DEVELOPMENT_TEAM = ZA5R9X85B5;
 				ENABLE_PREVIEWS = YES;
@@ -608,7 +617,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.6;
+				MARKETING_VERSION = 2.0.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mizzou.gcycaas.Oilix;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -623,9 +632,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Oilix/ManualWiFi.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_ASSET_PATHS = "\"Oilix/Preview Content\"";
 				DEVELOPMENT_TEAM = ZA5R9X85B5;
 				ENABLE_PREVIEWS = YES;
@@ -644,10 +654,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.6;
+				MARKETING_VERSION = 2.0.7;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mizzou.gcycaas.Oilix;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) OILIX_MANUAL_WIFI";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

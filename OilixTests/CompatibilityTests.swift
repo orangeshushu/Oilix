@@ -6,6 +6,26 @@ import Alamofire
 @testable import Oilix
 
 final class CompatibilityTests: XCTestCase {
+    func testESP32AcceptsPrivateAddressAndRejectsOtherDestinations() {
+        XCTAssertEqual(ESP32Connection.probeURL(for: " 192.168.1.87 ")?.absoluteString,
+                       "http://192.168.1.87/")
+        XCTAssertEqual(ESP32Connection.probeURL(for: "http://10.0.0.4:8080/")?.absoluteString,
+                       "http://10.0.0.4:8080/")
+        for address in ["", "8.8.8.8", "172.32.0.1", "192.168.1.300", "192.168.1.87:65536",
+                        "https://192.168.1.87", "http://192.168.1.87/capture",
+                        "http://user@192.168.1.87", "http://192.168.1.87?capture=true"] {
+            XCTAssertNil(ESP32Connection.probeURL(for: address), address)
+        }
+    }
+
+    func testESP32ReadsRootHTTPStatusEvenWhenPageIsMissing() async throws {
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [ESP32ProbeFixture.self]
+        let url = try XCTUnwrap(ESP32Connection.probeURL(for: "192.168.1.87"))
+        let status = try await ESP32Connection.probe(url, configuration: configuration)
+        XCTAssertEqual(status, 404)
+    }
+
     func testLocationRejectsStaleInvalidAndFutureReadings() {
         let now = Date()
         func point(age: TimeInterval, accuracy: Double = 10, latitude: Double = 38.95) -> CLLocation {
@@ -126,6 +146,24 @@ final class CompatibilityTests: XCTestCase {
             UIColor.green.setFill(); context.fill(CGRect(x: 0, y: 0, width: 8, height: 8))
         }.jpegData(compressionQuality: 1)!
     }
+}
+
+private final class ESP32ProbeFixture: URLProtocol {
+    override class func canInit(with request: URLRequest) -> Bool { true }
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+
+    override func startLoading() {
+        guard let url = request.url, url.absoluteString == "http://192.168.1.87/",
+              request.httpMethod == "GET", request.value(forHTTPHeaderField: "Authorization") == nil else {
+            client?.urlProtocol(self, didFailWithError: URLError(.unsupportedURL))
+            return
+        }
+        let response = HTTPURLResponse(url: url, statusCode: 404, httpVersion: "HTTP/1.1", headerFields: nil)!
+        client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+        client?.urlProtocolDidFinishLoading(self)
+    }
+
+    override func stopLoading() {}
 }
 
 private final class LocationFixture: CLLocationManager {
